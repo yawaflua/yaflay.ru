@@ -15,20 +15,28 @@ namespace yaflay.ru.Новая_папка
 
         private async Task<string> getUrlFromGit(string baseUrl)
         {
-            HttpClient client = new();
-            string Base64BearerToken = Convert.ToBase64String(Encoding.UTF8.GetBytes(""));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Base64BearerToken);
-            HttpResponseMessage getter =  await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json");
-            JsonNode allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync());
-            return (string?)allFile[baseUrl];
+            try
+            {
+                HttpClient client = new();
+                HttpResponseMessage getter = await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json");
+                await Console.Out.WriteLineAsync(await getter.Content.ReadAsStringAsync());
+                JsonNode allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync());
+                return (string?)allFile[baseUrl];
+            }
+            catch (Exception except)
+            {
+                await Console.Out.WriteLineAsync(except.ToString());
+                return null;
+            }
         }
         // GET: HomeController/Details/5
-        [HttpGet]
-        public async Task<IActionResult> fromGitHub()
+        [HttpGet("/{uri}")]
+        public async Task<IActionResult> fromGitHub(string? uri)
         {
-            string? url = await getUrlFromGit(HttpContext.Request.Path.Value);
+            if (uri == null) { return View("Index.cshtml"); }
+            string? url = await getUrlFromGit(uri);
 
-            return Redirect(url != null ? url : "yaflay.ru");
+            return Redirect(url != null ? url : "https://yaflay.ru/");
         }
 
         // GET: HomeController/Create
