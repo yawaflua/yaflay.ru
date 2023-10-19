@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker login -u {{ secrets.USERNAME }} -p {{ secrets.PASSWORD }} && docker build . --file Dockerfile --tag ghcr.io/yaflay/yaflay_ru:$(date +%s) && docker push yaflay_ru:$(date +%s)
+      run: docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }} && docker build . --file Dockerfile --tag ghcr.io/yaflay/yaflay_ru:$(date +%s) && docker push yaflay_ru:$(date +%s)
