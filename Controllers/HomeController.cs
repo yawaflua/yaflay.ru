@@ -18,7 +18,7 @@ namespace yaflay.ru.Новая_папка
             HttpClient client = new();
             string Base64BearerToken = Convert.ToBase64String(Encoding.UTF8.GetBytes(""));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Base64BearerToken);
-            HttpResponseMessage getter =  await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json?token=GHSAT0AAAAAAB54DYE4TFGPWCCPBHAGGZR4ZJRKIVA");
+            HttpResponseMessage getter =  await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json");
             JsonNode allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync());
             return (string?)allFile[baseUrl];
         }
