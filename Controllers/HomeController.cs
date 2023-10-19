@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Headers;
@@ -29,14 +30,17 @@ namespace yaflay.ru.Новая_папка
                 return null;
             }
         }
+        
         // GET: HomeController/Details/5
-        [HttpGet("/{uri}")]
+        [HttpGet("/r/{uri}")]
         public async Task<IActionResult> fromGitHub(string? uri)
         {
-            if (uri == null) { return View("Index.cshtml"); }
+            
+            if (uri == "Robots.txt") { return Ok("User-Agent: * \n Disallow: \"/*\""); }
+            
             string? url = await getUrlFromGit(uri);
 
-            return Redirect(url != null ? url : "https://yaflay.ru/");
+            return Redirect(url != null ? url : uri);
         }
 
         // GET: HomeController/Create
