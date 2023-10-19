@@ -32,7 +32,7 @@ namespace yaflay.ru.Новая_папка
         }
         
         // GET: HomeController/Details/5
-        [HttpGet("/r/{uri}")]
+        [HttpGet("{uri}")]
         public async Task<IActionResult> fromGitHub(string? uri)
         {
             

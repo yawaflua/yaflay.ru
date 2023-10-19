@@ -15,10 +15,10 @@ namespace yaflay.ru
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddRazorPages(k => { k.RootDirectory = "/Pages"; });
-            services.AddControllersWithViews();
-            services.AddDirectoryBrowser();
-
+            services.AddRouting();
+            services.AddRazorPages();
+            //services.AddDirectoryBrowser();
+            
             
             
         }
@@ -30,18 +30,17 @@ namespace yaflay.ru
 
 
             // Configure the HTTP request pipeline.
-            
-            app.UseStaticFiles();
-            
 
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();
             
-            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                
             });
 
         }

@@ -8,8 +8,9 @@ public class Program
     private static IHostBuilder CreateHostBuilder()
     {
         return Host.CreateDefaultBuilder()
-        .ConfigureWebHost(webHost => {
+        .ConfigureWebHostDefaults(webHost => {
             webHost.UseStartup<Startup>();
+            webHost.UseStaticWebAssets();
             webHost.UseKestrel(kestrelOptions => { kestrelOptions.ListenAnyIP(80); });
         });
 
