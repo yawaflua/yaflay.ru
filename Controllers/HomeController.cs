@@ -44,7 +44,7 @@ namespace yaflay.ru.Новая_папка
             
             string? url = await getUrlFromGit(uri);
 
-            return Redirect(url != null ? url : uri);
+            return Redirect(url != null ? url : "https://yaflay.ru/");
         }
 
         // GET: HomeController/Create

@@ -1,0 +1,9 @@
+﻿@page
+@{
+    Layout = null;
+    this.Response.ContentType = "text/plain";
+}
+# /robots.txt file for http://www.hanselman.com/
+User-agent: *
+<environment include="Development,Staging">Disallow: /</environment>
+<environment include="Production">Disallow: /* </environment>

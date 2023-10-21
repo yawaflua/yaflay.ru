@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using HeyRed.OEmbed;
+using HeyRed.OEmbed.Providers;
+
 namespace yaflay.ru
 {
     public class Startup
@@ -26,7 +28,30 @@ namespace yaflay.ru
             {
                 options.EnableCache = true; // true by default
                 options.EnsureNotNull();
-            });
+            })
+                .ClearProviders()
+                .AddProvider<YoutubeProvider>()
+                .AddProvider<YandexMusicProvider>()
+                .AddProvider<FlickrProvider>()
+                .AddProvider<TwitterProvider>(options =>
+                {
+                    options.Parameters = new Dictionary<string, string?>
+                    {
+                        ["theme"] = "dark"
+                    };
+                })
+                .AddProvider<FacebookProvider>(options =>
+                {
+                    options.Parameters = new Dictionary<string, string?>
+                    {
+                        ["access_token"] = "app_id|token"
+                    };
+                });
+            services.AddMvc()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AddPageRoute("/robotstxt", "/Robots.Txt");
+                });
             //services.AddDirectoryBrowser();
 
 
