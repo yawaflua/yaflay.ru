@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using yaflay.ru.Pages;
 
 namespace yaflay.ru.Новая_папка
 {
@@ -9,17 +11,21 @@ namespace yaflay.ru.Новая_папка
     {
         // GET: HomeController
 
-        private async Task<string> getUrlFromGit(string baseUrl)
+        private async Task<string?> getUrlFromGit(string baseUrl)
         {
             try
             {
                 HttpClient client = new();
                 HttpResponseMessage getter = await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json");
-                await Console.Out.WriteLineAsync(await getter.Content.ReadAsStringAsync());
                 JsonNodeOptions jsonNodeOptions = new ();
-                JsonDocumentOptions jsonDocumentOptions = new();
-                jsonDocumentOptions.AllowTrailingCommas = true;
-                JsonNode allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync(), jsonNodeOptions, jsonDocumentOptions);
+                JsonDocumentOptions jsonDocumentOptions = new()
+                {
+                    AllowTrailingCommas = true
+                };
+                JsonNode? allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync(),
+                                                 nodeOptions: jsonNodeOptions,
+                                                 documentOptions: jsonDocumentOptions);
+                ;
                 return (string?)allFile[baseUrl];
             }
             catch (Exception except)
@@ -29,19 +35,21 @@ namespace yaflay.ru.Новая_папка
             }
         }
         
-        // GET: HomeController/Details/5
         [HttpGet("{uri}")]
-        public async Task<IActionResult> fromGitHub(string? uri)
+        public async Task<IActionResult> FromGitHub(string uri)
         {
             
-            if (uri == "Robots.txt") { return Ok("User-Agent: * \n Disallow: /*"); }
-           
-            
             string? url = await getUrlFromGit(uri);
-            await Console.Out.WriteLineAsync(url == null ? "Null" : $"notNull {url}");
-            return Redirect(url ?? "https://yaflay.ru/404");
+            await Console.Out.WriteLineAsync($"New connected user: {HttpContext.Connection.RemoteIpAddress}");
+            if (url != null) 
+            {
+                return Redirect(url);
+            }
+            else
+            {
+                return Redirect("/404");
+            }
+            
         }
-
-        // GET: HomeController/Create
     }
 }

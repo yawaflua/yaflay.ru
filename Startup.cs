@@ -18,7 +18,8 @@ namespace yaflay.ru
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
-                    options.Conventions.AddPageRoute("/ErrorPage", "/404");
+                    options.Conventions.AddPageRoute("/NotFound", "/404");
+                    options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                 });
             services.AddRouting();
             services.AddRazorPages();
@@ -26,7 +27,8 @@ namespace yaflay.ru
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
-                    options.Conventions.AddPageRoute("/ErrorPage", "/404");
+                    options.Conventions.AddPageRoute("/NotFound", "/404");
+                    options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                 });
             //services.AddDirectoryBrowser();
 
@@ -38,15 +40,18 @@ namespace yaflay.ru
         {
             // Add services to the container.
             // app.Services.AddRazorPages();
-
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                //app.UseHsts();
+            }
 
             // Configure the HTTP request pipeline.
-
             app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
