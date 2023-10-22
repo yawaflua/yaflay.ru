@@ -1,14 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using HeyRed.OEmbed.Abstractions;
-using HeyRed.OEmbed.Models;
-using HeyRed.OEmbed;
 
 namespace yaflay.ru.Новая_папка
 {

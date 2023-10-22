@@ -20,7 +20,7 @@ namespace yaflay.ru
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AddPageRoute("/robotstxt", "/Robots.Txt");
+                    options.Conventions.AddPageRoute("/robots.txt", "/RobotsTxt");
                 });
             //services.AddDirectoryBrowser();
 
