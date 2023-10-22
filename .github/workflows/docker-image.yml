@@ -4,9 +4,9 @@ on:
   release:
     types: [published]
   push:
-    types: [latest]
+    types: [published]
   pull_request:
-    types: [latest]
+    types: [published]
 
 jobs:
   push_to_registries:
