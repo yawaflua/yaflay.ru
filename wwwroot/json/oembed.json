@@ -1,0 +1,16 @@
+{
+  "embeds": [
+    {
+      "type": "link",
+      "url": "https://yaflay.ru/",
+      "title": "YaFlay ReadMe",
+      "description": "Here you can learn about YaFlay: social networks, programming languages that he knows and his projects.",
+      "thumbnail": {
+        "url": "https://avatars.githubusercontent.com/u/93622229?v=4",
+        "proxy_url": "https://avatars.githubusercontent.com/u/93622229?v=4",
+        "width": 1200,
+        "height": 1200
+      }
+    }
+  ]
+}

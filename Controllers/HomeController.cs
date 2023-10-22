@@ -6,7 +6,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Xml.Schema;
+using HeyRed.OEmbed.Abstractions;
+using HeyRed.OEmbed.Models;
+using HeyRed.OEmbed;
 
 namespace yaflay.ru.Новая_папка
 {
@@ -40,11 +42,12 @@ namespace yaflay.ru.Новая_папка
         public async Task<IActionResult> fromGitHub(string? uri)
         {
             
-            if (uri == "Robots.txt") { return Ok("User-Agent: * \n Disallow: \"/*\""); }
+            if (uri == "Robots.txt") { return Ok("User-Agent: * \n Disallow: /*"); }
+           
             
             string? url = await getUrlFromGit(uri);
-
-            return Redirect(url != null ? url : "https://yaflay.ru/");
+            await Console.Out.WriteLineAsync(url == null ? "Null" : $"notNull {url}");
+            return Redirect(url ?? "https://yaflay.ru/");
         }
 
         // GET: HomeController/Create
