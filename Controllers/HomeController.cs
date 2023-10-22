@@ -39,7 +39,7 @@ namespace yaflay.ru.Новая_папка
             
             string? url = await getUrlFromGit(uri);
             await Console.Out.WriteLineAsync(url == null ? "Null" : $"notNull {url}");
-            return Redirect(url ?? "https://yaflay.ru/");
+            return Redirect(url ?? "https://yaflay.ru/404");
         }
 
         // GET: HomeController/Create

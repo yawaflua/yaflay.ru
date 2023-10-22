@@ -14,13 +14,19 @@ namespace yaflay.ru
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                    options.Conventions.AddPageRoute("/ErrorPage", "/404");
+                });
             services.AddRouting();
             services.AddRazorPages();
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AddPageRoute("/robots.txt", "/RobotsTxt");
+                    options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                    options.Conventions.AddPageRoute("/ErrorPage", "/404");
                 });
             //services.AddDirectoryBrowser();
 
