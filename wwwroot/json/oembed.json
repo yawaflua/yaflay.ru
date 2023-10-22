@@ -1,7 +1,7 @@
 {
   "embeds": [
     {
-      "type": "link",
+      "type": "rich",
       "url": "https://yaflay.ru/",
       "title": "YaFlay ReadMe",
       "description": "Here you can learn about YaFlay: social networks, programming languages that he knows and his projects.",
