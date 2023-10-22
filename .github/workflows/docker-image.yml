@@ -4,9 +4,11 @@ on:
   release:
     types: [published]
   push:
-    types: [latest]
+    branches: [ "master" ]
+    
   pull_request:
-    types: [latest]
+    branches: [ "master" ]
+
 
 jobs:
   push_to_registries:
