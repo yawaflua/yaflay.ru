@@ -4,6 +4,7 @@ namespace yaflay.ru
     public class Startup
     {
         private readonly IConfiguration configuration;
+        public static HttpClient client = new HttpClient();
         public Startup()
         {
             configuration = new ConfigurationBuilder()
