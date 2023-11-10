@@ -2,9 +2,9 @@
   "embeds": [
     {
       "type": "rich",
-      "url": "yaflay.ru",
-      "title": "YaFlay ReadMe",
-      "description": "Here you can get info about YaFlay: social networks, programming languages that he knows and his projects.",
+      "url": "yawaflua.ru",
+      "title": "ReadAbout yawaflua",
+      "description": "Here you can get info about yawaflua: social networks, programming languages that he knows and his projects.",
       "thumbnail": {
         "url": "https://user-images.githubusercontent.com/5713670/87202985-820dcb80-c2b6-11ea-9f56-7ec461c497c3.gif",
         "proxy_url": "https://user-images.githubusercontent.com/5713670/87202985-820dcb80-c2b6-11ea-9f56-7ec461c497c3.gif",

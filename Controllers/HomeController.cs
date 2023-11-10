@@ -11,26 +11,25 @@ namespace yaflay.ru.Новая_папка
     {
         // GET: HomeController
 
+        
         private async Task<string?> getUrlFromGit(string baseUrl)
         {
             try
             {
                 HttpClient client = new();
-                HttpResponseMessage getter = await client.GetAsync("https://raw.githubusercontent.com/YaFlay/yaflay.ru/master/redirect_uris.json");
-                JsonNodeOptions jsonNodeOptions = new ();
-                JsonDocumentOptions jsonDocumentOptions = new()
+                HttpResponseMessage getter = await client.GetAsync("https://raw.githubusercontent.com/yawaflua/yaflay.ru/master/redirect_uris.json");
+                JsonDocumentOptions jsonDocumentOptions = new ()
                 {
                     AllowTrailingCommas = true
                 };
                 JsonNode? allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync(),
-                                                 nodeOptions: jsonNodeOptions,
                                                  documentOptions: jsonDocumentOptions);
                 ;
                 return (string?)allFile[baseUrl];
             }
             catch (Exception except)
             {
-                await Console.Out.WriteLineAsync(except.ToString());
+                await Console.Out.WriteLineAsync(except.Message.ToString());
                 return null;
             }
         }
@@ -40,7 +39,6 @@ namespace yaflay.ru.Новая_папка
         {
             
             string? url = await getUrlFromGit(uri);
-            await Console.Out.WriteLineAsync($"New connected user: {HttpContext.Connection.RemoteIpAddress}");
             if (url != null) 
             {
                 return Redirect(url);

@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "YaFlay";
+    ViewData["Title"] = "yawaflua";
 }
 
 <h3 align="left" class="readme" >README.md</h3>  
@@ -9,5 +9,6 @@
 @{
     string Github_readme = Startup.client.GetStringAsync("https://raw.githubusercontent.com/yawaflua/yawaflua/main/README.md").Result;
     <div class="text"> @Html.Raw(Github_readme) </div>
+    
 }
 
