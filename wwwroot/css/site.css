@@ -9,6 +9,10 @@ html {
 .readme{
     font-family: 'Anonymous Pro';
 }
+.stats {
+    width: 60vmax;
+    max-width: 1000px;
+}
 body {
     background: #2c2c2c;
     color: white;
