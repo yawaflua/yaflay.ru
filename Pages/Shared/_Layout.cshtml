@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link type="application/json+oembed" href="~/json/oembed.json" />
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
-    <meta property="og:title" content="YaFlay ReadMe" />
+    <meta property="og:title" content="yawaflua readme" />
     <meta property="og:type" content="rich" />
     <meta property="og:url" content="@Context.Request.Host.Host" />
     <meta property="og:image" content="https://user-images.githubusercontent.com/5713670/87202985-820dcb80-c2b6-11ea-9f56-7ec461c497c3.gif" />
     <meta property="og:description"
-          content="Here you can check info about YaFlay: social networks, programming languages that he knows and his projects." />
+          content="Here you can check info about yawaflua: social networks, programming languages that he knows and his projects." />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="yaflay.ru" />
+    <meta property="og:site_name" content="yawaflua.ru" />
 </head>
 <body>
     <header>
@@ -39,7 +39,7 @@
                             <a class="nav-link text-white" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="https://storespw.ru">StoreSPw</a>
+                            <a class="nav-link text-white" href="https://storespw.ru/">StoreSPw</a>
                         </li>
                     </ul>
                 </div>
@@ -52,12 +52,12 @@
             if (!Context.Request.Host.Host.StartsWith("yawaflua.ru"))
             {
             <div aria-live="polite" aria-atomic="true" style="margin-right: 3vh;">
-                    <div class="toast" style="position: fixed; bottom: 0; right: 0; display:block;">
-                    <div class="toast-header" >
-                        <strong class="mr-auto" style="left: 1%; position:absolute;">@Context.Request.Host.Host</strong>
-                        <small style="right: 1%; position:absolute; ">Now</small>
+                    <div class="toast bg-dark right-1vm absolute fixed" style="bottom: 0; display:block;">
+                    <div class="toast-header bg-dark" >
+                        <strong class="mr-auto left-1vm absolute">@Context.Request.Host.Host</strong>
+                        <small class="absolute right-1vm">Now</small>
                     </div>
-                    <div class="toast-body" style="color:black;">
+                    <div class="toast-body text-muted">
                         This site is outdated. Use <a href="https://yawaflua.ru">new site</a>
                     </div>
                 </div>
@@ -71,10 +71,13 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+    <footer class="border-top footer text-muted margin-2-vm">
+        <div class="container margin-2-vm">
             &copy; 2023 - @Context.Request.Host.Host - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
+        <p class="flex-row margin-2-vm container-md">
+            сrafted by <a href="https://yawaflua.ru/gh" class="underline dashed decoration-purple text-white hover:decoration-wavy">yawaflua</a>
+        </p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

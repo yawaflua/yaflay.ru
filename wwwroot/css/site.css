@@ -33,7 +33,18 @@ nav {
     font-size: 16px;
   }
 }
-
+.absolute {
+    position: absolute;
+}
+.fixed {
+    position:fixed;
+}
+.right-1vm {
+    right: 1vmax;
+}
+.left-1vm {
+    left: 1vmax;
+}
 html {
   position: relative;
   min-height: 100%;
@@ -46,6 +57,21 @@ div .text {
     border-radius: 4vh;
     border: solid white;
     border-width: 4px;
+}
+.margin-2-vm {
+    margin: 2vmax;
+}
+.underline{
+    text-decoration-line: underline;
+}
+.hover\:decoration-wavy:hover {
+    text-decoration-style: wavy
+}
+.dashed {
+    text-decoration-style: dashed;
+}
+.decoration-purple{
+    text-decoration-color: purple;
 }
 p {
     margin-right: 5vh;
