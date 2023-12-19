@@ -9,7 +9,7 @@ public class Program
         Startup.clientId = parse("clientId");
         Startup.clientSecret = parse("clientSecret");
         Startup.redirectUrl = parse("redirectUrl");
-        
+        Startup.connectionString = $"Host={parse("Host")};Username={parse("Username")};Password={parse("Password")};Database={parse("Database")}";
         CreateHostBuilder()
         .Build()
         .Run();

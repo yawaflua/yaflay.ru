@@ -20,6 +20,7 @@ namespace yaflay.ru
         public static string? clientId = null;
         public static string? clientSecret = null;
         public static string? redirectUrl = null;
+        public static string? connectionString { private get; set; } = null;
         public Startup()
         {
             configuration = new ConfigurationBuilder()
@@ -31,6 +32,10 @@ namespace yaflay.ru
                 clientId = configuration.GetValue<string>("clientId");
                 clientSecret = configuration.GetValue<string>("clientSecret");
                 redirectUrl = configuration.GetValue<string>("redirectUrl");
+            }
+            if (connectionString == null)
+            {
+                connectionString = configuration.GetValue<string>("connectionString");
             }
             
         }
@@ -49,7 +54,7 @@ namespace yaflay.ru
             services
                 .AddRouting()
                 .AddSingleton(configuration)
-                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: configuration.GetValue<string>("connectionOnServer")))
+                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString))
                 .AddCoreAdmin("Admin");
             services.AddRazorPages();
             services.AddCors(k => { k.AddDefaultPolicy(l => { l.AllowAnyHeader(); l.AllowAnyMethod(); l.AllowAnyOrigin(); }); })

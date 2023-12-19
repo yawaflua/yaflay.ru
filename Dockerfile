@@ -2,7 +2,10 @@
 ARG CLIENTID
 ARG CLIENTSECRET
 ARG REDIRECTURL
-
+ARG PSQL_HOST
+ARG PSQL_USER
+ARG PSQL_PASSWORD
+ARG PSQL_DATABASE
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -17,7 +20,7 @@ WORKDIR "/src/."
 RUN dotnet build "yaflay.ru.csproj" -c Release -o /app/build 
 
 FROM build AS publish
-RUN dotnet publish "yaflay.ru.csproj" -c Release -o /app/publish /p:UseAppHost=false;redirectUrl=$REDIRECTURL;clientId=$CLIENTID;clientSecret=$CLIENTSECRET
+RUN dotnet publish "yaflay.ru.csproj" -c Release -o /app/publish /p:UseAppHost=false;redirectUrl=$REDIRECTURL;clientId=$CLIENTID;clientSecret=$CLIENTSECRET;Host=$PSQL_HOST;Username=$PSQL_USER;Password=$PSQL_PASSWORD;Database=$PSQL_DATABASE
 
 FROM base AS final
 WORKDIR /app
