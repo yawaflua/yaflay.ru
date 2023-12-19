@@ -98,14 +98,15 @@ namespace yaflay.ru.Новая_папка
             JsonNode response = JsonNode.Parse(responseBody);
             if (response["user"] != null || response["user"]?["id"].ToString() == "945317832290336798")
             {
+                Author author = new()
+                {
+                    discordId = int.Parse(response["user"]["id"].ToString()),
+                    discordNickName = response["user"]["display_name"].ToString()
+                };
                 Blogs article = new()
                 {
                     Annotation = body.annotation,
-                    author = new Author()
-                    {
-                        discordId = int.Parse(response["user"]["id"].ToString()),
-                        discordNickName = response["user"]["display_name"].ToString()
-                    },
+                    author = author,
                     dateTime = DateTime.Now,
                     ImageUrl = body.image,
                     Text = body.text,
@@ -113,11 +114,11 @@ namespace yaflay.ru.Новая_папка
                 };
                 await Startup.dbContext.Blogs.AddAsync(article);
                 await Startup.dbContext.SaveChangesAsync();
-                return Ok();
+                return Ok(body);
             }
             else
             {
-                return Unauthorized();
+                return Unauthorized(body);
             }
         }
         [HttpGet("logout")]
@@ -175,6 +176,26 @@ namespace yaflay.ru.Новая_папка
                 return Redirect("/404");
             }
             
+        }
+        [HttpGet("static/{file}")]
+        public HttpResponseMessage Generate(string file)
+        {
+            var stream = new MemoryStream();
+            // processing the stream.
+
+            var result = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(stream.ToArray())
+            };
+            result.Content.Headers.ContentDisposition =
+                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = $"wwwroot/static/{file}"
+                };
+            result.Content.Headers.ContentType =
+                new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+            return result;
         }
     }
 }

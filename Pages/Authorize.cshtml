@@ -3,7 +3,6 @@
 @using System.Text.Json.Nodes
 @{
     ViewData["Title"] = "Authorize";
-    <h4>code - @Model.code</h4>
     if (Model.code == null)
     {
         if (Request.Cookies["melon"]?.ToString() == null)
