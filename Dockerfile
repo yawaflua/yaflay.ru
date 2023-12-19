@@ -6,6 +6,7 @@ ARG PSQL_HOST
 ARG PSQL_USER
 ARG PSQL_PASSWORD
 ARG PSQL_DATABASE
+
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -25,4 +26,4 @@ RUN dotnet publish "yaflay.ru.csproj" -c Release -o /app/publish /p:UseAppHost=f
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "yaflay.ru.dll"]
+ENTRYPOINT ["dotnet", "yaflay.ru.dll", "/p:redirectUrl=$REDIRECTURL;clientId=$CLIENTID;clientSecret=$CLIENTSECRET;Host=$PSQL_HOST;Username=$PSQL_USER;Password=$PSQL_PASSWORD;Database=$PSQL_DATABASE"]

@@ -4,6 +4,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        
         var parsedArgs = args.FirstOrDefault(k => k.StartsWith("/p:")).Replace("/p:", "").Split(";");
         var parse = (string name) => parsedArgs.FirstOrDefault(k => k.StartsWith(name))?.Split("=")[1] ?? null;
         Startup.clientId = parse("clientId");
