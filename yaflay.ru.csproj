@@ -13,7 +13,6 @@
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Discord" Version="7.0.4" />
     <PackageReference Include="CoreAdmin" Version="2.7.1" />
-    <PackageReference Include="Discord.OAuth2" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
