@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using yaflay.ru;
 public class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        
-        var parsedArgs = args.FirstOrDefault(k => k.StartsWith("/p:")).Replace("/p:", "").Split(";");
+        string args = Environment.CommandLine;
+        var parsedArgs = args.Split(";");
         var parse = (string name) => parsedArgs.FirstOrDefault(k => k.StartsWith(name))?.Split("=")[1] ?? null;
         Startup.clientId = parse("clientId");
         Startup.clientSecret = parse("clientSecret");
