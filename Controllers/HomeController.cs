@@ -88,7 +88,7 @@ namespace yaflay.ru.Новая_папка
         public async Task<IActionResult> createArticle([FromBody] articleBody body)
         {
 
-            Console.WriteLine(body.author);
+            Console.WriteLine(body.author+body.title+body.annotation);
             HttpResponseMessage message;
             using (var requestMessage =
                 new HttpRequestMessage(HttpMethod.Get, "https://discordapp.com/api/oauth2/@me"))
