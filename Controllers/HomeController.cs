@@ -87,6 +87,8 @@ namespace yaflay.ru.Новая_папка
         [HttpPost("api/Blog")]
         public async Task<IActionResult> createArticle([FromBody] articleBody body)
         {
+
+            Console.WriteLine(body.author);
             HttpResponseMessage message;
             using (var requestMessage =
                 new HttpRequestMessage(HttpMethod.Get, "https://discordapp.com/api/oauth2/@me"))
@@ -98,6 +100,7 @@ namespace yaflay.ru.Новая_папка
             JsonNode response = JsonNode.Parse(responseBody);
             if (response["user"] != null || response["user"]?["id"].ToString() == "945317832290336798")
             {
+                await Console.Out.WriteLineAsync(response["user"].ToString());
                 Author author = new()
                 {
                     discordId = ulong.Parse(response["user"]["id"].ToString()),
