@@ -100,7 +100,7 @@ namespace yaflay.ru.Новая_папка
             {
                 Author author = new()
                 {
-                    discordId = int.Parse(response["user"]["id"].ToString()),
+                    discordId = ulong.Parse(response["user"]["id"].ToString()),
                     discordNickName = response["user"]["display_name"].ToString()
                 };
                 Blogs article = new()
