@@ -6,7 +6,9 @@ namespace yaflay.ru.Models
     public class AppDbContext : DbContext
     {
         
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
 
         public DbSet<Blogs> Blogs { get; set; }
         public DbSet<Comments> Comments { get; set; }
