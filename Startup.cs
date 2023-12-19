@@ -17,24 +17,22 @@ namespace yaflay.ru
         public static HttpClientHandler handler = new() { CookieContainer = cookieContainer};
         public static HttpClient client = new(handler);
         public static AppDbContext? dbContext;
-        public static string applicationId;
-        public static string appToken;
-        public static string clientId;
-        public static string clientSecret;
-        public static string redirectUrl;
+        public static string? clientId = null;
+        public static string? clientSecret = null;
+        public static string? redirectUrl = null;
         public Startup()
         {
             configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables(prefix: "m.")
-                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile("appsettings.json", optional: true)
                 .Build();
+            if (clientId == null | clientSecret == null | redirectUrl == null) 
+            {
+                clientId = configuration.GetValue<string>("clientId");
+                clientSecret = configuration.GetValue<string>("clientSecret");
+                redirectUrl = configuration.GetValue<string>("redirectUrl");
+            }
             
-            Console.WriteLine(configuration.GetValue<string>("applicationId"));
-            applicationId = configuration.GetValue<string>("applicationId");
-            appToken = configuration.GetValue<string>("appToken");
-            clientId = configuration.GetValue<string>("clientId");
-            clientSecret = configuration.GetValue<string>("clientSecret");
-            redirectUrl = configuration.GetValue<string>("redirectUrl");
         }
         public void ConfigureServices(IServiceCollection services)
         {

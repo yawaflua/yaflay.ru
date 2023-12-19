@@ -42,7 +42,7 @@
             new HttpRequestMessage(HttpMethod.Post, "https://discordapp.com/api/oauth2/token"))
         {
             requestMessage.Content = new StringContent(
-                @$"grant_type=authorization_code&code={Model.code}&client_id={Startup.clientId}&client_secret={Startup.clientSecret}&scope=identify&redirect_uri=https://yawaflua.ru/authorize", 
+                @$"grant_type=authorization_code&code={Model.code}&client_id={Startup.clientId}&client_secret={Startup.clientSecret}&scope=identify&redirect_uri={Startup.redirectUrl}", 
                 new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded")
                 );
             message = await Startup.client.SendAsync(requestMessage);
