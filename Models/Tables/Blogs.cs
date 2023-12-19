@@ -20,7 +20,7 @@ namespace yaflay.ru.Models.Tables
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int discordId { get; set; }
+        public ulong discordId { get; set; }
         public string discordNickName { get; set; }
     }
 }
