@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using DotNetEd.CoreAdmin;
 using Microsoft.EntityFrameworkCore;
 using yaflay.ru.Models;
-using Discord.OAuth2;
+
 
 namespace yaflay.ru
 {
