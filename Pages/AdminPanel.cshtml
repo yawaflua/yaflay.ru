@@ -1,0 +1,75 @@
+﻿@page "{type?}"
+@model yaflay.ru.Pages.AdminPanelModel
+@using System.Text.Json.Nodes
+@{
+    ViewData["Title"] = "AdminPanel";
+    bool isAllowed = true;
+}
+@if (Request.Cookies["melon"] != null)
+{
+    
+    if (Request.Cookies["cable"] != "945317832290336798")
+    {
+        <h1 align="center">Вы не авторизованы! Сасни хуйца, олух</h1>
+        isAllowed = false;
+    }
+} else
+{
+    <h1 align="center">Вы не авторизованы! Сасни хуйца, олух</h1>
+    isAllowed = false;
+}
+@if (Model.type == "article" & isAllowed){
+    <div class="card margin-2-vm">
+        <div class="card-body bg-dark">
+            <h5 class="card-title">Код статьи (HTML)</h5>
+            <div class="card-text form-group bg-dark text-muted">
+                <label for="titleInput">Тайтл статьи</label>
+                <input type="text" class="form-control bg-dark text-muted" id="titleInput" />
+
+                <label for="annotationArea">Код аннотации</label>
+                <textarea class="form-control bg-dark text-muted" id="annotationArea" rows="2" onkeyup="updateAnnotation(this.value)"></textarea>
+
+                <label for="textArea">Код статьи</label>
+                <textarea class="form-control bg-dark text-muted" id="textArea" rows="5" onkeyup="updatePreview(this.value)"></textarea>
+
+                <label for="imgInput">Ссылка на изображение</label>
+                <input type="url" class="form-control bg-dark text-muted" id="imgInput" ></input>
+
+            </div>
+        </div>
+    </div>
+    <div class="card margin-2-vm" >
+        <div class="card-body bg-dark">
+            <h5 class="card-title text-muted">Превью аннотации</h5>
+            <div class="card-text text-muted overflow-auto" id="annotationCard">
+                <code id="code"><p id="annotationText"></p></code>
+            </div>
+            <h5 class="card-title text-muted">Превью текста</h5>
+            <div class="card-text text-muted overflow-auto" id="previewCard">
+                <code id="code"><p id="blogText"></p></code>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="sendBlogText" align="center" class="btn-primary margin-2-vm " onclick="sendArticleData()">Send!</button>
+}
+else if (Model.type == "redirects" & isAllowed)
+{
+    <div class="card margin-2-vm">
+        <div class="card-body bg-dark">
+            <h5 class="card-title">Редиректы</h5>
+            <div class="card-text form-group bg-dark text-muted">
+                <label for="urlInput">Ссылка</label>
+                <input type="url" class="form-control bg-dark text-muted" id="urlInput" />
+
+                <label for="uriInput">Uri</label>
+                <input type="text" class="form-control bg-dark text-muted" id="uriInput" />
+
+            </div>
+        </div>
+    </div>
+    <button type="button" id="sendRedirect" align="center" class="btn-primary margin-2-vm " onclick="sendRedirectData()">Send!</button>
+}
+else if (isAllowed)
+{
+    <h2 align="center" class="text-white absolute"><a href="/AdminPanel/redirects">Редиректы</a><a href="/AdminPanel/article">Статьи</a></h2>
+}

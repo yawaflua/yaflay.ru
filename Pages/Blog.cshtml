@@ -1,0 +1,99 @@
+﻿@page "{id?}"
+@model BlogModel
+@using yaflay.ru.Models.Tables
+@{
+    if (Model.Id == 0)
+        ViewData["Title"] = "Blog";
+}
+@{
+    string path = $"{this.Request.Scheme}://{this.Request.Host}";
+}
+@{
+    if (Model.Id != 0)
+    {
+
+        Blogs? Post = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == Model.Id);
+        if (Post == null)
+        {
+            ViewData["Title"] = "Blogs";
+            <h1 align="center">Что-то не так...</h1>
+            <h1 align="center">Пост не найден, но ты держи яблочко -> 🍎</h1>
+        } else
+        {
+            ViewData["Title"] = Post.Title;
+            ViewData["og:title"] = Post.Title;
+            ViewData["og:url"] = this.Request.Host.Host + this.Request.Path.ToString();
+            ViewData["og:description"] = Post.Annotation;
+            ViewData["og:image"] = Post.ImageUrl;
+            
+            <p align="left">
+        <h1 align="left">@Html.Raw(Post.Title)</h1>
+        <h5>@Post.dateTime</h5>
+    </p>
+    <div id="blogId" style="display:none;">@Model.Id</div>
+    <p align="center"><img src="@Post.ImageUrl" style="width:50vmax;"/></p>
+    <p align="center">@Html.Raw(Post.Text)</p>
+    <h6 align="left">Статья подготовлена <a href="https://yawaflua.ru/gh">Дмитрием</a></h6>
+    <div class="container my-5 py-5 bg-dark text-muted">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="card text-muted bg-dark">
+                    <div class="card-body position-static p-4" id="allComments">
+                        <h4 class="mb-0" id="commentBar">Последние комментарии</h4>
+                        
+                        <h1 align="center">Дальше тьма...</h1>
+                                                                                    
+                                                                                
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    }
+
+    <div class="card-footer text-white bg-dark mb-3 py-3 border-0" >
+        <div class="d-flex flex-start w-100">
+            <div class="form-outline w-100">
+                <label for="userEmail" class="form-label">Адрес электронной почты</label>
+                <input type="email" class="form-control bg-dark text-white" id="userEmail" placeholder="name@example.com" name="userEmail">
+                <label for="commentText" class="form-label">Комментарий</label>
+                <input type="text" class="form-control bg-dark text-white" id="commentText" rows="4" name="commentText">
+            </div>
+        </div>
+        <div class="float-end mt-2 pt-1">
+            <button type="button" class="btn btn-primary btn-sm" id="postComment" >Запостить коммент</button>
+        </div>
+    </div>
+
+        
+    }
+    
+    else
+    {
+        var allBlogs = Startup.dbContext.Blogs.ToArray();
+        if (allBlogs.Length == 0)
+        {
+                                                            <p>
+                                                                <h1 align="center">Ничего нет...</h1>
+                                                                <h1 align="center">Вот вам банан -> 🍌</h1>
+                                                            </p>
+        }
+        else
+        {
+            foreach (var blog in allBlogs)
+            {
+                                                <div class="card text-white bg-dark mb-3 text-center" style="width: 18rem;">
+                                                    <img src="@blog.ImageUrl" class="card-img-top" alt="...">
+                                                    <div class="card-body ">
+                                                        <h5 class="card-title">@Html.Raw(blog.Title)</h5>
+                                                        <p class="card-text">@Html.Raw(blog.Annotation)</p>
+                                                        <a href="/Blog/@blog.Id" class="btn btn-primary center">Читать</a>
+                                                    </div>
+                                                </div>
+            }
+        }
+    }
+}
+
+
+

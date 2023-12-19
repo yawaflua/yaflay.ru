@@ -16,6 +16,7 @@ namespace yaflay.ru.Pages
         public void OnGet()
         {
             Page();
+            
         }
 
     }

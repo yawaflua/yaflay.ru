@@ -6,6 +6,9 @@ html {
     color: white;
 
 }
+.app_name {
+    font-size: calc(12px + 1vmax);
+}
 .readme{
     font-family: 'Anonymous Pro';
 }
@@ -83,7 +86,22 @@ img {
     margin-bottom: 1vh;
     
 }
-
+.bot-1 {
+    padding-bottom: 1vmax;
+}
 body {
   margin-bottom: 60px;
+}
+.margin-left-2-vm{
+    margin-left: 2vmax;
+}
+.margin-right-2-vm {
+    margin-right: 2vmax;
+}
+
+.width-4 {
+    width: 4vmax;
+}
+.blurple {
+    color: #5865F2;
 }

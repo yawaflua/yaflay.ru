@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    @using System.Text.Json.Nodes
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="~/favicon.ico" />
@@ -9,14 +10,34 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link type="application/json+oembed" href="~/json/oembed.json" />
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
-    <meta property="og:title" content="yawaflua readme" />
-    <meta property="og:type" content="rich" />
-    <meta property="og:url" content="@Context.Request.Host.Host" />
-    <meta property="og:image" content="https://user-images.githubusercontent.com/5713670/87202985-820dcb80-c2b6-11ea-9f56-7ec461c497c3.gif" />
-    <meta property="og:description"
-          content="Here you can check info about yawaflua: social networks, programming languages that he knows and his projects." />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="yawaflua.ru" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    @if (Context.Request.Path == "")
+    {
+        <meta property="og:title" content="yawaflua readme" />
+        <meta property="og:type" content="rich" />
+        <meta property="og:url" content="@Context.Request.Host.Host" />
+        <meta property="og:image" content="https://user-images.githubusercontent.com/5713670/87202985-820dcb80-c2b6-11ea-9f56-7ec461c497c3.gif" />
+        <meta property="og:description"
+        content="Here you can check info about yawaflua: social networks, programming languages that he knows and his projects." />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="yawaflua.ru" />
+    } 
+    else
+    {
+        <meta property="og:title" content="@ViewData["og:title"]" />
+        <meta property="og:type" content="rich" />
+        <meta property="og:url" content="@ViewData["og:url"]" />
+        <meta property="og:image" content="@ViewData["og:title"]" />
+        <meta property="og:description"
+              content="@ViewData["og:title"]" />
+        <meta property="og:locale" content="ru_RU" />
+        <meta property="og:site_name" content="yawaflua.ru" />
+    }
 </head>
 <body>
     <header>
@@ -29,6 +50,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+
                         <a class="nav-link " style="color: cornflowerblue;" asp-area="" asp-page="/Index">
                             @Context.Request.Host.Host
                         </a>
@@ -39,8 +61,35 @@
                             <a class="nav-link text-white" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="https://storespw.ru/">StoreSPw</a>
+                            <a class="nav-link text-white" asp-area="" asp-page="/Blog">Blog</a>
                         </li>
+                        @{
+                            Context.Response.Cookies.Delete("cable");
+                            if (Context.Request.Cookies["melon"] != null)
+                            {
+                                HttpResponseMessage message;
+                                using (var requestMessage =
+                                    new HttpRequestMessage(HttpMethod.Get, "https://discordapp.com/api/oauth2/@me"))
+                                {
+                                    requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Context.Request.Cookies["melon"]); ;
+                                    message = await Startup.client.SendAsync(requestMessage);
+                                }
+                                string responseBody = await message.Content.ReadAsStringAsync();
+                                JsonNode response = JsonNode.Parse(responseBody);
+                                if (response["user"] != null)
+                                {
+                                    Context.Response.Cookies.Append("cable", response["user"]["id"].ToString());
+                                    string userName = response["user"]["global_name"].ToString();
+                                    <li class="nav-item">
+                                        <a href="/logout" 
+                                        class="nav-link blurple hover:decoration-wavy underline dashed decoration-purple" 
+                                        style="color: #5865F2; font-size: calc(var(--bs-body-font-size) + .15rem);">
+                                            @userName
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        }
                     </ul>
                 </div>
             </div>
@@ -82,7 +131,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @if (Context.Request.Path.ToString().StartsWith("/AdminPanel"))
+    {
+        <script src="~/js/AdminPanel.js"></script>
+    }
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

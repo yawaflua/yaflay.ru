@@ -11,7 +11,7 @@ public class Program
         .ConfigureWebHostDefaults(webHost => {
             webHost.UseStartup<Startup>();
             webHost.UseStaticWebAssets();
-            webHost.UseKestrel(kestrelOptions => { kestrelOptions.ListenAnyIP(80); });
+            webHost.UseKestrel(kestrelOptions => { kestrelOptions.ListenAnyIP(80);});
         });
 
     }

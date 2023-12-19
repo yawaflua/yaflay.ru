@@ -1,0 +1,64 @@
+﻿@page "{code}"
+@model yaflay.ru.Pages.AuthorizeModel
+@using System.Text.Json.Nodes
+@{
+    ViewData["Title"] = "Authorize";
+    <h4>code - @Model.code</h4>
+    if (Model.code == null)
+    {
+        if (Request.Cookies["melon"]?.ToString() == null)
+        {
+            <a href="https://discord.com/api/oauth2/authorize?client_id=1115013432710799440&response_type=code&redirect_uri=https%3A%2F%2Fyawaflua.ru%2Fauthorize&scope=identify">Login while Discord</a>
+        }
+        else
+        {
+            HttpResponseMessage message;
+            using (var requestMessage =
+                new HttpRequestMessage(HttpMethod.Get, "https://discordapp.com/api/oauth2/@me"))
+            {
+                requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Request.Cookies["melon"]); ;
+                message = await Startup.client.SendAsync(requestMessage);
+            }
+            string responseBody = await message.Content.ReadAsStringAsync();
+            JsonNode response = JsonNode.Parse(responseBody);
+            if (response["user"] != null)
+            {
+                <h4>Вы авторизованы!</h4>
+                <a href="/AdminPanel"> Админка </a>
+            }
+            else
+            {
+                <h4>
+                    Токен авторизации неправильный! Попробуйте <a href="https://discord.com/api/oauth2/authorize?client_id=1115013432710799440&response_type=code&redirect_uri=https%3A%2F%2Fyawaflua.ru%2Fauthorize&scope=identify">заново</a>
+                </h4>
+            }
+
+        }
+    }
+    else
+    {
+
+        HttpResponseMessage message;
+        using (var requestMessage =
+            new HttpRequestMessage(HttpMethod.Post, "https://discordapp.com/api/oauth2/token"))
+        {
+            requestMessage.Content = new StringContent(
+                @$"grant_type=authorization_code&code={Model.code}&client_id={Startup.clientId}&client_secret={Startup.clientSecret}&scope=identify&redirect_uri=https://yawaflua.ru/authorize", 
+                new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded")
+                );
+            message = await Startup.client.SendAsync(requestMessage);
+        }
+        string responseBody = await message.Content.ReadAsStringAsync();
+        JsonNode body = JsonNode.Parse(responseBody);
+        if (body["access_token"]?.ToString() == null)
+        {
+            <h4>Ошибка! Попробуй авторизоваться заново</h4>
+        }
+        else
+        {
+            Response.Cookies.Append("melon", body["access_token"].ToString());
+            Response.Cookies.Append("watermelon", body["refresh_token"].ToString());
+            Response.Redirect("/authorize");
+        }
+    }
+}
