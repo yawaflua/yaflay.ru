@@ -177,25 +177,6 @@ namespace yaflay.ru.Новая_папка
             }
             
         }
-        [HttpGet("static/{file}")]
-        public HttpResponseMessage Generate(string file)
-        {
-            var stream = new MemoryStream();
-            // processing the stream.
-
-            var result = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(stream.ToArray())
-            };
-            result.Content.Headers.ContentDisposition =
-                new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = $"wwwroot/static/{file}"
-                };
-            result.Content.Headers.ContentType =
-                new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-
-            return result;
-        }
+        
     }
 }
