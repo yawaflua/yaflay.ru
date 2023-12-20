@@ -7,7 +7,12 @@ Thanks for the help to [@Mih4n](https://github.com/Mih4n)!
 
 If you wanna help me, create Issue or Pull request.
 
-
+# Features
+- Authorization with discord OAuth2
+- Main page is downloaded from user`s github readme(like [this](https://github.com/yawaflua/yawaflua))
+- Blog system with loading comments after render a page, for optimization
+- Admin panel for blog`s, can make article for blog and write to db new redirect setting(Discord OAuth2)
+- Future plans to make this project fully manageable from a docker-compose file (.env file or environment settings are supported by Docker)
 # How to start?
 You should to use this command for download this package from ghcr:
 ```cli
@@ -42,6 +47,11 @@ Example data for appsettings.json:
   },
   "clientId": "111111111111",
   "clientSecret": "aAbBcCdD",
-  "redirectUrl": "https://example.com/authorize"
+  "redirectUrl": "https://example.com/authorize",
+  "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;"
 }
 ```
+# Support me
+[boosty](https://yawaflua.ru/boosty) - boosty
+
+[patreon](https://yawaflua.ru/patreon) - patreon
