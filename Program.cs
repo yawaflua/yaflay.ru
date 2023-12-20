@@ -4,14 +4,13 @@ public class Program
 {
     public static void Main()
     {
-        string args = Environment.CommandLine;
-        Console.WriteLine(args);
-        var parsedArgs = args.Split(";");
-        var parse = (string name) => parsedArgs.FirstOrDefault(k => k.StartsWith(name))?.Split("=")[1] ?? null;
+        
+        var parse = (string name) => Environment.GetEnvironmentVariable(name) ?? null;
         Startup.clientId = parse("clientId");
         Startup.clientSecret = parse("clientSecret");
         Startup.redirectUrl = parse("redirectUrl");
         Startup.connectionString = $"Host={parse("Host")};Username={parse("Username")};Password={parse("Password")};Database={parse("Database")}";
+        Console.WriteLine(parse("clientId"));
         CreateHostBuilder()
         .Build()
         .Run();
