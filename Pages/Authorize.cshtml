@@ -3,7 +3,7 @@
 @using System.Text.Json.Nodes
 @{
     ViewData["Title"] = "Authorize";
-    string authorizationUrl = "https://discord.com/api/oauth2/authorize?client_id=@Startup.clientId&response_type=code&redirect_uri=@Startup.redirectUrl&scope=identify";
+    string authorizationUrl = $"https://discord.com/api/oauth2/authorize?client_id={Startup.clientId}&response_type=code&redirect_uri={Startup.redirectUrl}&scope=identify";
     <p style="display:none;">Data: @Startup.clientId @Startup.redirectUrl @Startup.ownerId @Model.code</p>
     if (Model.code == null)
     {
