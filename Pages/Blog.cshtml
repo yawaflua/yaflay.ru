@@ -33,7 +33,7 @@
     <div id="blogId" style="display:none;">@Model.Id</div>
     <p align="center"><img src="@Post.ImageUrl" style="width:50vmax;"/></p>
     <p align="center">@Html.Raw(Post.Text)</p>
-    <h6 align="left">Статья подготовлена <a href="https://yawaflua.ru/gh">Дмитрием</a></h6>
+    <h6 align="left">Статья подготовлена <a href="https://discord.com/users/@Post.author.Id">@Post.author.discordNickName</a></h6>
     <div class="container my-5 py-5 bg-dark text-muted">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12 col-lg-10">
@@ -73,23 +73,23 @@
         var allBlogs = Startup.dbContext.Blogs.ToArray();
         if (allBlogs.Length == 0)
         {
-                                                            <p>
-                                                                <h1 align="center">Ничего нет...</h1>
-                                                                <h1 align="center">Вот вам банан -> 🍌</h1>
-                                                            </p>
+            <p>
+                <h1 align="center">Ничего нет...</h1>
+                <h1 align="center">Вот вам банан -> 🍌</h1>
+            </p>
         }
         else
         {
-            foreach (var blog in allBlogs)
+            foreach (Blogs blog in allBlogs)
             {
-                                                <div class="card text-white bg-dark mb-3 text-center" style="width: 18rem;">
-                                                    <img src="@blog.ImageUrl" class="card-img-top" alt="...">
-                                                    <div class="card-body ">
-                                                        <h5 class="card-title">@Html.Raw(blog.Title)</h5>
-                                                        <p class="card-text">@Html.Raw(blog.Annotation)</p>
-                                                        <a href="/Blog/@blog.Id" class="btn btn-primary center">Читать</a>
-                                                    </div>
-                                                </div>
+                <div class="card text-white bg-dark mb-3 text-center" style="width: 18rem;">
+                    <img src="@blog.ImageUrl" class="card-img-top" />
+                    <div class="card-body ">
+                        <h5 class="card-title">@Html.Raw(blog.Title)</h5>
+                        <p class="card-text">@Html.Raw(blog.Annotation)</p>
+                        <a href="/Blog/@blog.Id" class="btn btn-primary center">Читать</a>
+                    </div>
+                </div>
             }
         }
     }

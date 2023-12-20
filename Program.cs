@@ -4,14 +4,17 @@ public class Program
 {
     public static void Main()
     {
-        var parse = (string name) => Environment.GetEnvironmentVariable(name) ?? null;
+        Func<string, string?> parse = (string name) => Environment.GetEnvironmentVariable(name) ?? null;
+
         Startup.clientId = parse("CLIENTID");
         Startup.clientSecret = parse("CLIENTSECRET");
         Startup.redirectUrl = parse("REDIRECTURL");
         Startup.connectionString = $"Host={parse("PSQL_HOST")};Username={parse("PSQL_USER")};Password={parse("PSQL_PASSWORD")};Database={parse("PSQL_DATABASE")}";
+        Startup.ownerId = parse("OWNERID");
+        Startup.readmeFile = parse("READMEFILE");
         CreateHostBuilder()
-        .Build()
-        .Run();
+            .Build()
+            .Run();
     }
     private static IHostBuilder CreateHostBuilder()
     {

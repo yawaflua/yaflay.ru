@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using yaflay.ru.Models.Tables;
@@ -29,32 +30,7 @@ namespace yaflay.ru.Новая_папка
             public string uri { get; set; }
             public string author { get; set; }
         }
-        /// <summary>
-        /// Getting redirect url from github file
-        /// </summary>
-        /// <param name="baseUrl"> uri-key of json in github file</param>
-        /// <returns type="string">url</returns>
-        private async Task<string?> getUrlFromGit(string baseUrl)
-        {
-            try
-            {
-                HttpClient client = new();
-                HttpResponseMessage getter = await client.GetAsync("https://raw.githubusercontent.com/yawaflua/yaflay.ru/master/redirect_uris.json");
-                JsonDocumentOptions jsonDocumentOptions = new ()
-                {
-                    AllowTrailingCommas = true
-                };
-                JsonNode? allFile = JsonNode.Parse(await getter.Content.ReadAsStringAsync(),
-                                                 documentOptions: jsonDocumentOptions);
-                ;
-                return (string?)allFile[baseUrl];
-            }
-            catch (Exception except)
-            {
-                await Console.Out.WriteLineAsync(except.Message.ToString());
-                return null;
-            }
-        }
+
         [HttpPost("api/redirects")]
         public async Task<IActionResult> createRedirectUri([FromBody]redirectBody body)
         {
@@ -68,7 +44,7 @@ namespace yaflay.ru.Новая_папка
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || response["user"]?["id"].ToString() == "945317832290336798")
+            if (response["user"] != null || response["user"]?["id"].ToString() == Startup.ownerId)
             {
                 Redirects redirects = new()
                 {
@@ -97,7 +73,7 @@ namespace yaflay.ru.Новая_папка
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || response["user"]?["id"].ToString() == "945317832290336798")
+            if (response["user"] != null || response["user"]?["id"].ToString() == Startup.ownerId)
             {
                 Author author = new()
                 {
@@ -144,22 +120,22 @@ namespace yaflay.ru.Новая_папка
             
            
             Comments comment = new()
-                {
-                    creatorMail = body.sender,
-                    dateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                    Text = body.text,
-                    postId = blogId
-                };
-                await Startup.dbContext.Comments.AddAsync(comment);
-                await Startup.dbContext.SaveChangesAsync();
-                return Ok();
+            {
+                creatorMail = body.sender,
+                dateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                Text = body.text,
+                postId = blogId
+            };
+            await Startup.dbContext.Comments.AddAsync(comment);
+            await Startup.dbContext.SaveChangesAsync();
+            return Ok();
         }
         
         [HttpGet("api/Blog/{blogId}")]
         public async Task<IActionResult> blog(int blogId)
         {
 
-            Blogs? blog = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == blogId) ?? null;
+            Blogs? blog = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == blogId);
             return Ok(blog);
         }
 
@@ -168,14 +144,9 @@ namespace yaflay.ru.Новая_папка
         {
             
             string? url = Startup.dbContext.Redirects.FirstOrDefault(k => k.uri == uri)?.redirectTo;
-            if (url != null) 
-            {
-                return Redirect(url);
-            }
-            else
-            {
-                return Redirect("/404");
-            }
+            return Redirect(url ?? "/404");
+            
+            
             
         }
         

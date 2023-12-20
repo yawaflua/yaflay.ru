@@ -8,7 +8,7 @@
 @if (Request.Cookies["melon"] != null)
 {
     
-    if (Request.Cookies["cable"] != "945317832290336798")
+    if (Request.Cookies["cable"] != Startup.ownerId)
     {
         <h1 align="center">Вы не авторизованы! Сасни хуйца, олух</h1>
         isAllowed = false;

@@ -8,7 +8,7 @@
     <title>@ViewData["Title"] - @Context.Request.Host.Host</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link type="application/json+oembed" href="~/json/oembed.json" />
+    
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
@@ -16,7 +16,7 @@
 
     <!-- and it's easy to individually load additional languages -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
-    @if (Context.Request.Path == "")
+    @if (!Context.Request.Path.ToString().StartsWith("/Blog/"))
     {
         <meta property="og:title" content="yawaflua readme" />
         <meta property="og:type" content="rich" />
@@ -26,8 +26,9 @@
         content="Here you can check info about yawaflua: social networks, programming languages that he knows and his projects." />
         <meta property="og:locale" content="en_US" />
         <meta property="og:site_name" content="yawaflua.ru" />
+        <link type="application/json+oembed" href="~/json/oembed.json" />
     } 
-    else
+    else if (Context.Request.Path.ToString().StartsWith("/Blog/"))
     {
         <meta property="og:title" content="@ViewData["og:title"]" />
         <meta property="og:type" content="rich" />
@@ -123,10 +124,11 @@
     <footer class="border-top footer text-muted margin-2-vm">
         <div class="container margin-2-vm">
             &copy; 2023 - @Context.Request.Host.Host - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <b class="flex-row margin-2-vm container-md">
+                сrafted by <a href="https://yawaflua.ru/gh" class="underline dashed decoration-purple text-white hover:decoration-wavy">yawaflua</a>
+            </b>
         </div>
-        <p class="flex-row margin-2-vm container-md">
-            сrafted by <a href="https://yawaflua.ru/gh" class="underline dashed decoration-purple text-white hover:decoration-wavy">yawaflua</a>
-        </p>
+        
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

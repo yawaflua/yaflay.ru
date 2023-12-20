@@ -3,11 +3,13 @@
 @using System.Text.Json.Nodes
 @{
     ViewData["Title"] = "Authorize";
+    string authorizationUrl = "https://discord.com/api/oauth2/authorize?client_id=@Startup.clientId&response_type=code&redirect_uri=@Startup.redirectUrl&scope=identify";
+    <p style="display:none;">Data: @Startup.clientId @Startup.redirectUrl @Startup.ownerId @Model.code</p>
     if (Model.code == null)
     {
         if (Request.Cookies["melon"]?.ToString() == null)
         {
-            <a href="https://discord.com/api/oauth2/authorize?client_id=1115013432710799440&response_type=code&redirect_uri=https%3A%2F%2Fyawaflua.ru%2Fauthorize&scope=identify">Login while Discord</a>
+            <a href="@authorizationUrl">Login while Discord</a>
         }
         else
         {
@@ -28,7 +30,7 @@
             else
             {
                 <h4>
-                    Токен авторизации неправильный! Попробуйте <a href="https://discord.com/api/oauth2/authorize?client_id=1115013432710799440&response_type=code&redirect_uri=https%3A%2F%2Fyawaflua.ru%2Fauthorize&scope=identify">заново</a>
+                    Токен авторизации неправильный! Попробуйте <a href="@authorizationUrl">заново</a>
                 </h4>
             }
 
@@ -52,6 +54,13 @@
         if (body["access_token"]?.ToString() == null)
         {
             <h4>Ошибка! Попробуй авторизоваться заново</h4>
+            
+            Console.Error.WriteLine("Don't worry, this message is not bad as you think \n START \\/");
+            Console.Error.WriteLine("Error: DiscordAuthorize is not worked");
+            Console.Error.WriteLine($"Body from discord: {body}");
+            Console.Error.WriteLine($"Check environment data: \n ClientId={Startup.clientId}\nClientSecret={Startup.clientSecret}\nRedirectUrl={Startup.redirectUrl}\nOwnerId=wwwwwwwwwwwwwwwwwwwwwww{Startup.ownerId} ");
+            Console.Error.WriteLine("If any data is null and you set data in environment or appsettings.json, please create issue with this debug messages ");
+            Console.Error.WriteLine("END /\\");
         }
         else
         {

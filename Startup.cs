@@ -20,6 +20,8 @@ namespace yaflay.ru
         public static string? clientId = null;
         public static string? clientSecret = null;
         public static string? redirectUrl = null;
+        public static string? ownerId = null;
+        public static string? readmeFile = null;
         public static string? connectionString { private get; set; } = null;
         public Startup()
         {
@@ -36,6 +38,14 @@ namespace yaflay.ru
             if (connectionString == null)
             {
                 connectionString = configuration.GetValue<string>("connectionString");
+            }
+            if (ownerId == null)
+            {
+                ownerId = configuration.GetValue<string>("ownerId");
+            }
+            if (readmeFile == null)
+            {
+                readmeFile = configuration.GetValue<string>("readmeFile");
             }
             
         }
@@ -54,8 +64,7 @@ namespace yaflay.ru
             services
                 .AddRouting()
                 .AddSingleton(configuration)
-                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString))
-                .AddCoreAdmin("Admin");
+                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString));
             services.AddRazorPages();
             services.AddCors(k => { k.AddDefaultPolicy(l => { l.AllowAnyHeader(); l.AllowAnyMethod(); l.AllowAnyOrigin(); }); })
                     .AddMvc()
@@ -68,7 +77,9 @@ namespace yaflay.ru
                         });
 
             dbContext = services.BuildServiceProvider().GetRequiredService<AppDbContext>();
-
+#if DEBUG == true
+            services.AddCoreAdmin("admin");
+#endif
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,9 +97,11 @@ namespace yaflay.ru
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+#if DEBUG
             app.UseCoreAdminCustomTitle("yawaflua");
             app.UseCoreAdminCustomAuth((k) => Task.FromResult(true));
             app.UseCoreAdminCustomUrl("admin/coreadmin");
+#endif
             app.UseCors(k => { k.AllowAnyMethod(); k.AllowAnyOrigin(); k.AllowAnyHeader(); });
             app.UseEndpoints(endpoints =>
             {
