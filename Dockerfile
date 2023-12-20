@@ -21,7 +21,7 @@ ENV PSQL_HOST localhost
 ENV PSQL_USER root
 ENV PSQL_PASSWORD root
 ENV PSQL_DATABASE database
-RUN dotnet publish "yaflay.ru.csproj" -c Release -o /app/publish /p:UseAppHost=false;redirectUrl=$CLIENTID;clientId=;clientSecret=$CLIENTSECRET;Host=$PSQL_HOST;Username=$PSQL_USER;Password=$PSQL_PASSWORD;Database=$PSQL_DATABASE
+RUN dotnet publish "yaflay.ru.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

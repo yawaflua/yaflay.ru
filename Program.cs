@@ -2,15 +2,13 @@ using Microsoft.AspNetCore.Hosting;
 using yaflay.ru;
 public class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        Console.WriteLine(args[0]);
         var parse = (string name) => Environment.GetEnvironmentVariable(name) ?? null;
-        Startup.clientId = parse("clientId");
-        Startup.clientSecret = parse("clientSecret");
-        Startup.redirectUrl = parse("redirectUrl");
-        Startup.connectionString = $"Host={parse("Host")};Username={parse("Username")};Password={parse("Password")};Database={parse("Database")}";
-        Console.WriteLine(parse("CLIENTID"));
+        Startup.clientId = parse("CLIENTID");
+        Startup.clientSecret = parse("CLIENTSECRET");
+        Startup.redirectUrl = parse("REDIRECTURL");
+        Startup.connectionString = $"Host={parse("PSQL_HOST")};Username={parse("PSQL_USER")};Password={parse("PSQL_PASSWORD")};Database={parse("PSQL_DATABASE")}";
         CreateHostBuilder()
         .Build()
         .Run();
