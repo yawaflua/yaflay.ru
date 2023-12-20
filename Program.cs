@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Hosting;
 using yaflay.ru;
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
-        
+        Console.WriteLine(args[0]);
         var parse = (string name) => Environment.GetEnvironmentVariable(name) ?? null;
         Startup.clientId = parse("clientId");
         Startup.clientSecret = parse("clientSecret");
