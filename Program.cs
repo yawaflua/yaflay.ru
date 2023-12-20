@@ -5,6 +5,7 @@ public class Program
     public static void Main()
     {
         string args = Environment.CommandLine;
+        Console.WriteLine(args);
         var parsedArgs = args.Split(";");
         var parse = (string name) => parsedArgs.FirstOrDefault(k => k.StartsWith(name))?.Split("=")[1] ?? null;
         Startup.clientId = parse("clientId");
