@@ -55,7 +55,7 @@ Example data for appsettings.json:
   "redirectUrl": "https://example.com/authorize",
   "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;",
   "ownerId": "1111111111",
-  "readmeFile": "https://raw.githubusercontent.com/example/example/main/README.md
+  "readmeFile": "https://raw.githubusercontent.com/example/example/main/README.md"
 }
 ```
 # Support me
