@@ -36,6 +36,8 @@ services:
         REDIRECTURL: https://example.com/authorize
         CLIENTSECRET: aAbBcCdD123123
         CLIENTID: 1111111111111111111
+        OWNERID: 1111111111111111
+        READMEFILE: https://raw.githubusercontent.com/example/example/main/README.md
 ```
 For normal work this site need to give psql data to docker environ, or appsettings.json, if you download this project from github manually
 Example data for appsettings.json:
@@ -51,7 +53,9 @@ Example data for appsettings.json:
   "clientId": "111111111111",
   "clientSecret": "aAbBcCdD",
   "redirectUrl": "https://example.com/authorize",
-  "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;"
+  "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;",
+  "ownerId": "1111111111",
+  "readmeFile": "https://raw.githubusercontent.com/example/example/main/README.md
 }
 ```
 # Support me
