@@ -12,11 +12,11 @@ function updateAnnotation(value) {
 function sendArticleData () {
     let melon = document.cookie.split(';')[0].replace("melon=", "");
     let body = `{
-        title: ${$("#titleInput").val()},
-        annotation: ${$("#annotationArea").val()},
-        text: ${$("#textArea").val()},
-        image: ${$("#imgInput").val()},
-        author: ${melon}
+        title: "${$("#titleInput").val()}",
+        annotation: "${$("#annotationArea").val()}",
+        text: "${$("#textArea").val()}",
+        image: "${$("#imgInput").val()}",
+        author: "${melon}"
     }`
     fetch("/api/Blog", {
         method: "POST",

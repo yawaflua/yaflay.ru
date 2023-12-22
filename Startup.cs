@@ -55,6 +55,7 @@ namespace yaflay.ru
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                    options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
                     options.Conventions.AddPageRoute("/NotFound", "/404");
                     options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                     options.Conventions.AddPageRoute("/Authorize", "/authorize");
@@ -71,6 +72,7 @@ namespace yaflay.ru
                         .AddRazorPagesOptions(options =>
                         {
                             options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                            options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
                             options.Conventions.AddPageRoute("/NotFound", "/404");
                             options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                             options.Conventions.AddPageRoute("/Authorize", "/authorize");
@@ -81,7 +83,7 @@ namespace yaflay.ru
             services.AddCoreAdmin("admin");
 #endif
         }
-
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Add services to the container.
@@ -108,8 +110,6 @@ namespace yaflay.ru
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                
-                
             });
 
         }
