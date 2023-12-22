@@ -16,6 +16,7 @@ If you wanna help me, create Issue or Pull request.
 - Blog system with loading comments after render a page, for optimization
 - Admin panel for blog`s, can make article for blog and write to db new redirect setting(Discord OAuth2)
 - Future plans to make this project fully manageable from a docker-compose file (.env file or environment settings are supported by Docker)
+
 # How to start?
 You should to use this command for download this package from ghcr:
 ```cli
@@ -36,7 +37,10 @@ services:
         REDIRECTURL: https://example.com/authorize
         CLIENTSECRET: aAbBcCdD123123
         CLIENTID: 1111111111111111111
+        // You can add many ids, used "," like this:
+        // OWNERID: 111111111111111, 111111111111111, 1111111111111
         OWNERID: 1111111111111111
+        
         READMEFILE: https://raw.githubusercontent.com/example/example/main/README.md
 ```
 For normal work this site need to give psql data to docker environ, or appsettings.json, if you download this project from github manually
@@ -54,6 +58,11 @@ Example data for appsettings.json:
   "clientSecret": "aAbBcCdD",
   "redirectUrl": "https://example.com/authorize",
   "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;",
+  "__comment": {
+        "__comment": "You can add many ids, used "," like this:",
+        "ownerId": "111111111111111, 1111111111, 11111111111, 1111111111111",
+        "__comment_2": "please, didnt use dictionary-typed json value"
+  },
   "ownerId": "1111111111",
   "readmeFile": "https://raw.githubusercontent.com/example/example/main/README.md"
 }
