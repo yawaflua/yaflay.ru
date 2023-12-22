@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Authorize";
     string authorizationUrl = $"https://discord.com/api/oauth2/authorize?client_id={Startup.clientId}&response_type=code&redirect_uri={Startup.redirectUrl}&scope=identify";
-    <p style="display:none;">Data: @Startup.clientId @Startup.redirectUrl @String.Join(",", Startup.ownerId) @Model.code</p>
+    <p style="display:none;">Data: @Startup.clientId @Startup.redirectUrl [@String.Join(",", Startup.ownerId)] @Model.code</p>
     if (Model.code == null)
     {
         if (Request.Cookies["melon"]?.ToString() == null)

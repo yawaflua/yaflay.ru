@@ -8,7 +8,7 @@
 @if (Request.Cookies["melon"] != null)
 {
     
-    if (Startup.ownerId.FirstOrDefault(k => k.Equals(Request.Cookies["cable"])) == null)
+    if (Startup.ownerId.FirstOrDefault(k => k == (Request.Cookies["cable"])) == null)
     {
         <h1 align="center">Вы не авторизованы! Сасни хуйца, олух</h1>
         isAllowed = false;
