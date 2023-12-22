@@ -13,8 +13,8 @@ function sendArticleData () {
     let melon = document.cookie.split(';')[0].replace("melon=", "");
     let body = `{
         title: "${$("#titleInput").val().replace(/"/g, '\\"') }",
-        annotation: "${$("#annotationArea").val().replace(/\t/g, '\r\n').replace(/"/g, '\\"') }",
-        text: "${$("#textArea").val().replace(/\t/g, '\r\n').replace(/"/g, '\\"') }",
+        annotation: "${$("#annotationArea").val().replace(/\n/g, " \\n").replace(/"/g, '\\"') }}",
+        text: "${$("#textArea").val().replace(/\n/g, " \\n").replace(/"/g, '\\"') }",
         image: "${$("#imgInput").val()}",
         author: "${melon}"
     }`
