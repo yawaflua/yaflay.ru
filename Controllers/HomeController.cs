@@ -44,7 +44,7 @@ namespace yaflay.ru.Новая_папка
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || Startup.ownerId.FirstOrDefault(k => k.Equals(response["user"]?["id"].ToString())) != null)
+            if (response["user"] != null || Startup.ownerId.FirstOrDefault(k => k.Equals(response["user"]?["id"].ToString())) == null)
             {
                 Redirects redirects = new()
                 {
@@ -73,7 +73,7 @@ namespace yaflay.ru.Новая_папка
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || Startup.ownerId.FirstOrDefault(k => k.Equals(response["user"]?["id"].ToString())) != null )
+            if (response["user"] != null || Startup.ownerId.FirstOrDefault(k => k.Equals(response["user"]?["id"].ToString())) == null )
             {
                 try
                 {
