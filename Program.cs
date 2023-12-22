@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using yaflay.ru;
 public class Program
 {
@@ -10,7 +11,7 @@ public class Program
         Startup.clientSecret = parse("CLIENTSECRET");
         Startup.redirectUrl = parse("REDIRECTURL");
         Startup.connectionString = $"Host={parse("PSQL_HOST")};Username={parse("PSQL_USER")};Password={parse("PSQL_PASSWORD")};Database={parse("PSQL_DATABASE")}";
-        Startup.ownerId = parse("OWNERID");
+        Startup.ownerId = new[] { parse("OWNERID") };
         Startup.readmeFile = parse("READMEFILE");
         CreateHostBuilder()
             .Build()

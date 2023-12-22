@@ -9,20 +9,20 @@ function updateAnnotation(value) {
     blogText.append(value);
 }
 
-function sendArticleData () {
+function sendArticleData() {
     let melon = document.cookie.split(';')[0].replace("melon=", "");
     let body = `{
-        title: "${$("#titleInput").val().replace(/"/g, '\\"') }",
-        annotation: "${$("#annotationArea").val().replace(/\n/g, " \\n").replace(/"/g, '\\"') }}",
-        text: "${$("#textArea").val().replace(/\n/g, " \\n").replace(/"/g, '\\"') }",
-        image: "${$("#imgInput").val()}",
-        author: "${melon}"
-    }`
+    "title": "${$("#titleInput").val().replace(/"/g, '\"')}",
+    "annotation": "${$("#annotationArea").val().replace(/\n/g, " \\n").replace(/"/g, '\"')}}",
+    "text": "${$("#textArea").val().replace(/\n/g, " \\n").replace(/"/g, '\"')}",
+    "image": "${$("#imgInput").val()}",
+    "author": "${melon}"
+}`;
     fetch("/api/Blog", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${melon}`,
-            "Content-Type": "application/json" 
+            "Content-Type": "application/json"
         },
         body: body
     }).then(k => console.log(k));
@@ -45,7 +45,7 @@ function sendRedirectData() {
         method: "POST",
         headers: {
             Authorization: `Bearer ${melon}`,
-            "Content-Type": "application/json" 
+            "Content-Type": "application/json"
         },
         body: body
     }).then(k => console.log(k));

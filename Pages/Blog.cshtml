@@ -33,7 +33,7 @@
     <div id="blogId" style="display:none;">@Model.Id</div>
     <p align="center"><img src="@Post.ImageUrl" style="width:50vmax;"/></p>
     <p align="center">@Html.Raw(Post.Text)</p>
-    string userId = "https://discord.com/users/"+Post.author.Id;
+    string userId = "https://discord.com/users/"+Post.author.discordId;
     <h6 align="left">Статья подготовлена <a href="@userId">@Post.author.discordNickName</a></h6>
     <div class="container my-5 py-5 bg-dark text-muted">
         <div class="row d-flex justify-content-center">

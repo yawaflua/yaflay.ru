@@ -17,11 +17,11 @@ namespace yaflay.ru
         public static HttpClientHandler handler = new() { CookieContainer = cookieContainer};
         public static HttpClient client = new(handler);
         public static AppDbContext? dbContext;
-        public static string? clientId = null;
-        public static string? clientSecret = null;
-        public static string? redirectUrl = null;
-        public static string? ownerId = null;
-        public static string? readmeFile = null;
+        public static string? clientId { get; set; } = null;
+        public static string? clientSecret { get; set; } = null;
+        public static string? redirectUrl { get; set; } = null;
+        public static string[]? ownerId { get; set; } = null;
+        public static string? readmeFile { get; set; } = null;
         public static string? connectionString { private get; set; } = null;
         public Startup()
         {
@@ -39,9 +39,9 @@ namespace yaflay.ru
             {
                 connectionString = configuration.GetValue<string>("connectionString");
             }
-            if (ownerId == null)
+            if (ownerId.Length == 0)
             {
-                ownerId = configuration.GetValue<string>("ownerId");
+                ownerId = new[] { configuration.GetValue<string>("ownerId") };
             }
             if (readmeFile == null)
             {
