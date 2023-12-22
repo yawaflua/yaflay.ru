@@ -59,7 +59,7 @@ Example data for appsettings.json:
   "redirectUrl": "https://example.com/authorize",
   "connectionString": "Host=example.com;Username=root;Password=root;Database=MySite;",
   "__comment": {
-        "__comment": "You can add many ids, used "," like this:",
+        "__comment": "You can add many ids, used \",\" like this:",
         "ownerId": "111111111111111, 1111111111, 11111111111, 1111111111111",
         "__comment_2": "please, didnt use dictionary-typed json value"
   },
