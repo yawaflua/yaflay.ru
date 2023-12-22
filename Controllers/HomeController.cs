@@ -75,23 +75,34 @@ namespace yaflay.ru.Новая_папка
             JsonNode response = JsonNode.Parse(responseBody);
             if (response["user"] != null || response["user"]?["id"].ToString() == Startup.ownerId)
             {
-                Author author = new()
+                try
                 {
-                    discordId = ulong.Parse(response["user"]["id"].ToString()),
-                    discordNickName = response["user"]["global_name"].ToString()
-                };
-                Blogs article = new()
+                    Author author = new()
+                    {
+                        discordId = ulong.Parse(response["user"]["id"].ToString()),
+                        discordNickName = response["user"]["global_name"].ToString()
+                    };
+                    Blogs article = new()
+                    {
+                        Annotation = body.annotation,
+                        author = author,
+                        dateTime = DateTime.Now,
+                        ImageUrl = body.image,
+                        Text = body.text,
+                        Title = body.title
+                    };
+                    await Startup.dbContext.Blogs.AddAsync(article);
+                    await Startup.dbContext.SaveChangesAsync();
+                    return Ok(body);
+                }
+                catch (Exception ex)
                 {
-                    Annotation = body.annotation,
-                    author = author,
-                    dateTime = DateTime.Now,
-                    ImageUrl = body.image,
-                    Text = body.text,
-                    Title = body.title
-                };
-                await Startup.dbContext.Blogs.AddAsync(article);
-                await Startup.dbContext.SaveChangesAsync();
-                return Ok(body);
+                    Console.WriteLine("error: HomeController error");
+                    Console.WriteLine("debug: lines: 80-96");
+                    Console.WriteLine($"debug: data from site: {body}");
+                    Console.WriteLine($"debug: exception: {ex.Message}");
+                    return StatusCode(500, body);
+                }
             }
             else
             {
