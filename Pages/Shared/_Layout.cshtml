@@ -77,7 +77,7 @@
                                 }
                                 string responseBody = await message.Content.ReadAsStringAsync();
                                 JsonNode response = JsonNode.Parse(responseBody);
-                                if (response["user"] != null)
+                                if (!response["user"].isNull())
                                 {
                                     Context.Response.Cookies.Append("cable", response["user"]["id"].ToString());
                                     string userName = response["user"]["global_name"].ToString();

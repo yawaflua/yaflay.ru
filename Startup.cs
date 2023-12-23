@@ -38,10 +38,19 @@ namespace yaflay.ru
             if (connectionString == null)
             {
                 connectionString = configuration.GetValue<string>("connectionString");
+                Console.WriteLine("Connectionstring" + connectionString);
+                if (connectionString == null)
+                {
+                    throw new ArgumentException("ConnectionString is null!");
+                }
             }
-            if (ownerId.Length == 0)
+            if (ownerId == null)
             {
                 ownerId = new[] { configuration.GetValue<string>("ownerId") };
+                if (ownerId?.Length == 0)
+                {
+                    throw new ArgumentException("Owner id is null!");
+                }
             }
             if (readmeFile == null)
             {

@@ -13,12 +13,12 @@ namespace yaflay.ru.Models.Tables
         public string Annotation { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime dateTime { get; set; }
-        public Author author { get; set; }
+        public string authorId { get; set; }
+        public string authorNickname { get; set;  }
     }
 
     public class Author
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public ulong discordId { get; set; }
         public string discordNickName { get; set; }

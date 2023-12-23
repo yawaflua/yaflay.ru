@@ -77,19 +77,15 @@ namespace yaflay.ru.Новая_папка
             {
                 try
                 {
-                    Author author = new()
-                    {
-                        discordId = ulong.Parse(response["user"]["id"].ToString()),
-                        discordNickName = response["user"]["global_name"].ToString()
-                    };
                     Blogs article = new()
                     {
                         Annotation = body.annotation,
-                        author = author,
+                        authorId = response["user"]["id"].ToString(),
                         dateTime = DateTime.Now,
                         ImageUrl = body.image,
                         Text = body.text,
-                        Title = body.title
+                        Title = body.title,
+                        authorNickname = response["user"]["global_name"].ToString()
                     };
                     await Startup.dbContext.Blogs.AddAsync(article);
                     await Startup.dbContext.SaveChangesAsync();
