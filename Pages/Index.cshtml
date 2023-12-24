@@ -7,9 +7,9 @@
 <h3 align="left" class="readme" >README.md</h3>  
 
 @{
-    string Github_readme = Startup.client.GetStringAsync(Startup.readmeFile).Result;
+    string path = $"{this.Request.Scheme}://{this.Request.Host}";
+    string Github_readme = Startup.client.GetStringAsync($"{path}/api/Index").Result;
     <div class="text"> @Html.Raw(Github_readme) </div>
-    
 }
 
 

@@ -4,13 +4,23 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using yaflay.ru.Models.Tables;
-using yaflay.ru.Pages;
+using Microsoft.Extensions.Caching.Memory;
+using yaflay.ru.Models;
+using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace yaflay.ru.Новая_папка
 {
     [Route("")]
     public class HomeController : Controller
-    {        
+    {
+        private IMemoryCache cache;
+        private AppDbContext ctx;
+        public HomeController(IMemoryCache cache, AppDbContext ctx)
+        {
+            this.cache = cache;
+            this.ctx = ctx;
+        }
         public class commentBody
         {
             public string text { get; set; }
@@ -29,6 +39,20 @@ namespace yaflay.ru.Новая_папка
             public string url { get; set; }
             public string uri { get; set; }
             public string author { get; set; }
+        }
+
+        [HttpGet("api/Index")]
+        public async Task<IActionResult> getIndexPage()
+        {
+            string? indexPage = (string)cache.Get($"indexPage");
+            if (indexPage == null)
+            {
+                indexPage = await Startup.client.GetStringAsync(Startup.readmeFile);
+                if (indexPage != null)
+                    cache.Set($"indexPage", (object)indexPage, DateTime.Now.AddMinutes(10));
+            }
+
+            return Ok(indexPage);
         }
 
         [HttpPost("api/redirects")]
@@ -51,8 +75,8 @@ namespace yaflay.ru.Новая_папка
                     redirectTo = body.url,
                     uri = body.uri
                 };
-                await Startup.dbContext.Redirects.AddAsync(redirects);
-                await Startup.dbContext.SaveChangesAsync();
+                await ctx.Redirects.AddAsync(redirects);
+                await ctx.SaveChangesAsync();
                 return Ok();
             }
             else
@@ -87,8 +111,8 @@ namespace yaflay.ru.Новая_папка
                         Title = body.title,
                         authorNickname = response["user"]["global_name"].ToString()
                     };
-                    await Startup.dbContext.Blogs.AddAsync(article);
-                    await Startup.dbContext.SaveChangesAsync();
+                    await ctx.Blogs.AddAsync(article);
+                    await ctx.SaveChangesAsync();
                     return Ok(body);
                 }
                 catch (Exception ex)
@@ -117,8 +141,14 @@ namespace yaflay.ru.Новая_папка
         [HttpGet("api/Blog/{blogId?}/comments")]
         public async Task<IActionResult> blogComments(int? blogId)
         {
+            Comments[]? comments = (Comments[]?)cache.Get($"commentsWithBlogId{blogId}");
+            if (comments == null)
+            {
+                comments = ctx.Comments.Where(k => k.postId == blogId).ToArray();
+                if (comments != null)
+                    cache.Set($"commentsWithBlogId{blogId}", (object[])comments, DateTime.Now.AddMinutes(5));
+            }
             
-            Comments[] comments = Startup.dbContext.Comments.Where(k => k.postId == blogId).ToArray();
             return Ok(comments);
         }
         [HttpPost("api/Blog/{blogId}/comments")]
@@ -133,29 +163,55 @@ namespace yaflay.ru.Новая_папка
                 Text = body.text,
                 postId = blogId
             };
-            await Startup.dbContext.Comments.AddAsync(comment);
-            await Startup.dbContext.SaveChangesAsync();
+            await ctx.Comments.AddAsync(comment);
+            await ctx.SaveChangesAsync();
             return Ok();
         }
         
         [HttpGet("api/Blog/{blogId}")]
         public async Task<IActionResult> blog(int blogId)
         {
-
-            Blogs? blog = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == blogId);
+            Blogs? blog = (Blogs)cache.Get($"blogWithId{blogId}");
+            if (blog == null)
+            {
+                blog = ctx.Blogs.FirstOrDefault(k => k.Id == blogId);
+                if (blog != null)
+                    cache.Set($"blogWithId{blogId}", (object)blog, DateTime.Now.AddMinutes(10));
+                
+                
+            }
+            
+            
             return Ok(blog);
         }
+        [HttpGet("api/Blog")]
+        public async Task<IActionResult> allBlogs()
+        {
+            Blogs[]? blogs = (Blogs[])cache.Get($"allBlogs");
+            if (blogs == null)
+            {
+                blogs = ctx.Blogs.ToArray();
+                if (blog != null)
+                    cache.Set($"allBlogs", (object)blogs, DateTime.Now.AddMinutes(10));
 
+
+            }
+            return Ok(blogs);
+        }
         [HttpGet("{uri}")]
         public async Task<IActionResult> FromGitHub(string uri)
         {
-            
-            string? url = Startup.dbContext.Redirects.FirstOrDefault(k => k.uri == uri)?.redirectTo;
-            return Redirect(url ?? "/404");
-            
-            
-            
-        }
+            Redirects? fromCache = (Redirects)cache.Get($"redirectsWithUrl={uri}");
+            if (fromCache != null)
+            {
+                fromCache = ctx.Redirects.FirstOrDefault(k => k.uri == uri);
+                if (fromCache == null)
+                    cache.Set($"redirectsWithUrl={uri}", (object)fromCache, DateTime.Now.AddMinutes(5));
+            }
+           
+            return Redirect(fromCache?.redirectTo ?? "/404");
+           
+        } 
         
     }
 }

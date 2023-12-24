@@ -1,12 +1,15 @@
 ﻿@page "{id?}"
 @model BlogModel
 @using yaflay.ru.Models.Tables
+@using Newtonsoft.Json
 @{
     string path = $"{this.Request.Scheme}://{this.Request.Host}";
     if (Model.Id != 0)
     {
 
-        Blogs? Post = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == Model.Id);
+        //Blogs? Post = Startup.dbContext.Blogs.FirstOrDefault(k => k.Id == Model.Id);
+        var request = await Startup.client.GetAsync(path + "/api/Blog/" + Model.Id);
+        Blogs? Post = JsonConvert.DeserializeObject<Blogs>(request.Content.ReadAsStringAsync().Result);
         if (Post == null)
         {
             ViewData["Title"] = "Blogs";
@@ -66,7 +69,8 @@
     else
     {
         ViewData["Title"] = "Blog";
-        var allBlogs = Startup.dbContext.Blogs.ToArray();
+        var request = await Startup.client.GetAsync(path + "/api/Blog/");
+        Blogs[]? allBlogs = JsonConvert.DeserializeObject<Blogs[]>(request.Content.ReadAsStringAsync().Result);
         if (allBlogs.Length == 0)
         {
             <p>
