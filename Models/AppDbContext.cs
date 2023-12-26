@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using yaflay.ru.Database.Tables;
 using yaflay.ru.Models.Tables;
 
 namespace yaflay.ru.Models
@@ -13,6 +14,7 @@ namespace yaflay.ru.Models
         public DbSet<Blogs> Blogs { get; set; }
         public DbSet<Comments> Comments { get; set; }
         public DbSet<Redirects> Redirects { get; set; }
+        public DbSet<ApiKey> ApiKeys { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

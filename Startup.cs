@@ -4,7 +4,9 @@ using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using DotNetEd.CoreAdmin;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using yaflay.ru.Auth;
 using yaflay.ru.Models;
 
 
@@ -70,22 +72,40 @@ namespace yaflay.ru
                     options.Conventions.AddPageRoute("/Authorize", "/authorize");
                 });
             services
-                .AddAuthentication();
-            services
+                .AddCors(k => { k.AddDefaultPolicy(l => { l.AllowAnyHeader(); l.AllowAnyMethod(); l.AllowAnyOrigin(); }); })
                 .AddRouting()
+                .AddTransient<ApiKeyAuthantication>()
                 .AddSingleton(configuration)
-                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString));
+                .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString))
+                .AddAuthorization(k =>
+                {
+                    k.AddPolicy("DISCORD-OAUTH-PUBLIC", policyBuilder => {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.RequireClaim("Bearer", "Public");
+                    });
+                    k.AddPolicy("DISCORD-OAUTH-PRIVATE", policyBuilder => {
+                        policyBuilder.RequireAuthenticatedUser();
+                        policyBuilder.RequireClaim("Bearer", "Private");
+                    });
+                })
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Bearer";
+                    options.DefaultChallengeScheme = "Bearer";
+                    options.AddScheme<ApiKeyAuthantication>("DISCORD-OAUTH-PRIVATE", "DISCORD-OAUTH-PRIVATE");
+                    options.AddScheme<ApiKeyAuthantication>("DISCORD-OAUTH-PUBLIC", "DISCORD-OAUTH-PUBLIC");
+                }).AddScheme<AuthenticationSchemeOptions, ApiKeyAuthantication>("Bearer", options => {});
+            services.AddMvc()
+                    .AddRazorPagesOptions(options =>
+                    {
+                        options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                        options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
+                        options.Conventions.AddPageRoute("/NotFound", "/404");
+                        options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
+                        options.Conventions.AddPageRoute("/Authorize", "/authorize");
+                    });
             services.AddRazorPages();
-            services.AddCors(k => { k.AddDefaultPolicy(l => { l.AllowAnyHeader(); l.AllowAnyMethod(); l.AllowAnyOrigin(); }); })
-                    .AddMvc()
-                        .AddRazorPagesOptions(options =>
-                        {
-                            options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
-                            options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
-                            options.Conventions.AddPageRoute("/NotFound", "/404");
-                            options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
-                            options.Conventions.AddPageRoute("/Authorize", "/authorize");
-                        });
+            
 
             dbContext = services.BuildServiceProvider().GetRequiredService<AppDbContext>();
 #if DEBUG == true

@@ -1,7 +1,9 @@
 ﻿@page "{code}"
 @model yaflay.ru.Pages.AuthorizeModel
 @using System.Text.Json.Nodes
+@using Newtonsoft.Json
 @{
+    string path = $"{Request.Method}//{Request.Host}";
     ViewData["Title"] = "Authorize";
     string authorizationUrl = $"https://discord.com/api/oauth2/authorize?client_id={Startup.clientId}&response_type=code&redirect_uri={Startup.redirectUrl}&scope=identify";
     <p style="display:none;">Data: @Startup.clientId @Startup.redirectUrl [@String.Join(",", Startup.ownerId)] @Model.code</p>
@@ -26,6 +28,7 @@
             {
                 <h4>Вы авторизованы!</h4>
                 <a href="/AdminPanel"> Админка </a>
+                
             }
             else
             {
@@ -54,7 +57,7 @@
         if (body["access_token"]?.ToString() == null)
         {
             <h4>Ошибка! Попробуй авторизоваться заново</h4>
-            
+
             Console.Error.WriteLine("debug: START \\/ \nDon't worry, this message is not bad as you think");
             Console.Error.WriteLine("error: DiscordAuthorize is not worked");
             Console.Error.WriteLine($"debug: Body from discord: {body}\ndebug: Sended data to discord: {message.Content.ReadAsStringAsync().Result}");
@@ -66,6 +69,14 @@
         {
             Response.Cookies.Append("melon", body["access_token"].ToString());
             Response.Cookies.Append("watermelon", body["refresh_token"].ToString());
+            HttpContent bodytoApi = new StringContent(JsonConvert.SerializeObject(new yaflay.ru.Controllers.HomeController.authorizeBody()
+                    {
+                        discordId = body["user"]["id"].ToString(),
+                        melon = body["access_token"].ToString(),
+                        type = Auth.ApiKeyTypes.Public,
+                        watermelon = body["watermelon"].ToString()
+                    }));
+            var req = await Startup.client.PostAsync(path + "/api/authorize", bodytoApi);
             Response.Redirect("/authorize");
         }
     }
