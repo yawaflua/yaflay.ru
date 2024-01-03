@@ -1,6 +1,7 @@
 # Hello, there!
-[![](https://img.shields.io/website?url=https%3A%2F%2Fyawaflua.ru&style=for-the-badge)](https://yawaflua.ru)
+[![](https://img.shields.io/website?url=https%3A%2F%2Fyawaflua.ru)](https://yawaflua.ru)
 [![Publish Docker image](https://github.com/yawaflua/yaflay.ru/actions/workflows/docker-image.yml/badge.svg)](https://github.com/yawaflua/yaflay.ru/actions/workflows/docker-image.yml)
+![](https://img.shields.io/github/license/yawaflua/yaflay.ru)
 
 This is my custom site, with url: [yawaflua.ru](https://yawaflua.ru/)
 
