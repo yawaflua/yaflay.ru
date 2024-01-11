@@ -69,8 +69,9 @@
         {
             Response.Cookies.Append("melon", body["access_token"].ToString());
             Response.Cookies.Append("watermelon", body["refresh_token"].ToString());
-            HttpContent bodytoApi;
-            try{
+            try
+            {
+                HttpContent bodytoApi;
                 bodytoApi = new StringContent(JsonConvert.SerializeObject(new yaflay.ru.Controllers.HomeController.authorizeBody()
                     {
                         discordId = body["user"]["id"].ToString(),
@@ -78,12 +79,14 @@
                         type = Auth.ApiKeyTypes.Public,
                         watermelon = body["watermelon"].ToString()
                     }));
-            }catch(Exception ex)
+                var req = await Startup.client.PostAsync(path + "/api/authorize", bodytoApi);
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine(body);
                 Console.WriteLine(ex.Message);
             }
-            var req = await Startup.client.PostAsync(path + "/api/authorize", bodytoApi);
+            
             Response.Redirect("/authorize");
         }
     }
