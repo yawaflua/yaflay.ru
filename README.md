@@ -16,7 +16,7 @@ If you wanna help me, create Issue or Pull request.
 - Main page is downloaded from user`s github readme(like [this](https://github.com/yawaflua/yawaflua))
 - Blog system with loading comments after render a page, for optimization
 - Admin panel for blog`s, can make article for blog and write to db new redirect setting(Discord OAuth2)
-- Future plans to make this project fully manageable from a docker-compose file (.env file or environment settings are supported by Docker)
+- Set discord oauth2 and database settings from .env(docker-compose file, another docker-type function) or appsettings.json(only one from this)
 
 # How to start?
 You should to use this command for download this package from ghcr:
