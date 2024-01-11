@@ -20,9 +20,14 @@ If you wanna help me, create Issue or Pull request.
 
 # How to start?
 You should to use this command for download this package from ghcr:
-```cli
-docker pull ghcr.io/yawaflua/yaflay.ru:master
-```
+### For latest version
+  ```cli
+  docker pull ghcr.io/yawaflua/yaflay.ru:master
+  ```
+### For stable version
+  ```cli
+  docker pull ghcr.io/yawaflua/yaflay.ru:latest
+  ```
 After that create docker-compose file, for example:
 ```yml
 version: "3.9"
