@@ -61,7 +61,7 @@
             Console.Error.WriteLine("debug: START \\/ \nDon't worry, this message is not bad as you think");
             Console.Error.WriteLine("error: DiscordAuthorize is not worked");
             Console.Error.WriteLine($"debug: Body from discord: {body}\ndebug: Sended data to discord: {message.Content.ReadAsStringAsync().Result}");
-            Console.Error.WriteLine($"info: Check environment data: \nClientId={Startup.clientId}\nClientSecret={Startup.clientSecret}\nRedirectUrl={Startup.redirectUrl}\nOwnerId={Startup.ownerId} ");
+            Console.Error.WriteLine($"info: Check environment data: \nClientId={Startup.clientId}\nClientSecret={Startup.clientSecret}\nRedirectUrl={Startup.redirectUrl}\nOwnerId={String.Join(",", Startup.ownerId)} ");
             Console.Error.WriteLine("info: If any data is null and you set data in environment or appsettings.json, please create issue with this debug messages ");
             Console.Error.WriteLine("debug: END /\\");
         }
