@@ -69,8 +69,9 @@
         {
             Response.Cookies.Append("melon", body["access_token"].ToString());
             Response.Cookies.Append("watermelon", body["refresh_token"].ToString());
+            HttpContent bodytoApi;
             try{
-                HttpContent bodytoApi = new StringContent(JsonConvert.SerializeObject(new yaflay.ru.Controllers.HomeController.authorizeBody()
+                bodytoApi = new StringContent(JsonConvert.SerializeObject(new yaflay.ru.Controllers.HomeController.authorizeBody()
                     {
                         discordId = body["user"]["id"].ToString(),
                         melon = body["access_token"].ToString(),
