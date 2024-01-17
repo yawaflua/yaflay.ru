@@ -79,7 +79,7 @@ namespace yaflay.ru.Controllers
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || Startup.ownerId.FirstOrDefault(response["user"]?["id"].ToString()) == null)
+            if (response["user"] != null || Startup.ownerId?.FirstOrDefault(response["user"]?["id"].ToString()) == null)
             {
                 Redirects redirects = new()
                 {
@@ -109,7 +109,7 @@ namespace yaflay.ru.Controllers
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || Startup.ownerId.FirstOrDefault(response["user"]?["id"].ToString()) == null )
+            if (response["user"] != null || Startup.ownerId?.FirstOrDefault(response["user"]?["id"].ToString()) == null )
             {
                 try
                 {
@@ -235,7 +235,7 @@ namespace yaflay.ru.Controllers
             await ctx.SaveChangesAsync();
             return Ok(body.melon);
         }
-        [HttpGet("{uri}")]
+        [HttpGet("r/{uri}")]
         public async Task<IActionResult> FromGitHub(string uri)
         {
             Console.WriteLine(uri);
@@ -248,7 +248,7 @@ namespace yaflay.ru.Controllers
                 if (fromCache != null)
                     cache.Set($"redirectsWithUrl-{uri}", (object)fromCache, DateTime.Now.AddMinutes(10));
             }
-            Console.WriteLine(fromCache.ToString());
+            Console.WriteLine(fromCache?.ToString());
             return Redirect(fromCache?.redirectTo ?? "/404");
            
         } 

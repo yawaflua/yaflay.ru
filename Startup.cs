@@ -57,6 +57,10 @@ namespace yaflay.ru
             if (readmeFile == null)
             {
                 readmeFile = configuration.GetValue<string>("readmeFile");
+                if (readmeFile == null)
+                {
+                    throw new ArgumentException("ReadmeFile link is null");
+                }
             }
             
         }
