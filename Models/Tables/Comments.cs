@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Net.Mail;
 
-namespace yaflay.ru.Models.Tables
+namespace yawaflua.ru.Models.Tables
 {
     [Table("Comments", Schema = "public")]
     public class Comments

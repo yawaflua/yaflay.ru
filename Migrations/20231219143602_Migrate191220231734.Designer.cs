@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using yaflay.ru.Models;
+using yawaflua.ru.Models;
 
 #nullable disable
 
-namespace yaflay.ru.Migrations
+namespace yawaflua.ru.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20231219143602_Migrate191220231734")]
@@ -25,7 +25,7 @@ namespace yaflay.ru.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Author", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Author");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Blogs", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,7 +81,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Blogs", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Comments", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Comments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Comments", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Redirects", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Redirects", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,9 +127,9 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Redirects");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Blogs", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
                 {
-                    b.HasOne("yaflay.ru.Models.Tables.Author", "author")
+                    b.HasOne("yawaflua.ru.Models.Tables.Author", "author")
                         .WithMany()
                         .HasForeignKey("authorId")
                         .OnDelete(DeleteBehavior.Cascade)

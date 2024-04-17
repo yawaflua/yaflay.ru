@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using yaflay.ru.Auth;
+using yawaflua.ru.Auth;
 
-namespace yaflay.ru.Database.Tables;
+namespace yawaflua.ru.Database.Tables;
 
 [Table("ApiKeys", Schema = "public")]
 public class ApiKey

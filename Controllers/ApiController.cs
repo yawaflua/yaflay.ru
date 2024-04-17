@@ -1,24 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Text.Json;
 using System.Text.Json.Nodes;
-using yaflay.ru.Models.Tables;
+using yawaflua.ru.Models.Tables;
 using Microsoft.Extensions.Caching.Memory;
-using yaflay.ru.Models;
+using yawaflua.ru.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using yaflay.ru.Auth;
-using yaflay.ru.Database.Tables;
+using yawaflua.ru.Auth;
+using yawaflua.ru.Database.Tables;
+using yawaflua.ru.Utilities;
+using api.yawaflua.ru.Models.Tables;
+using Newtonsoft.Json;
 
-namespace yaflay.ru.Controllers
+namespace yawaflua.ru.Controllers
 {
-    [Route("")]
-    public class HomeController : Controller
+    [Route("api/")]
+    public class ApiController : Controller
     {
         private IMemoryCache cache;
         private AppDbContext ctx;
-        public HomeController(IMemoryCache cache, AppDbContext ctx)
+        public ApiController(IMemoryCache cache, AppDbContext ctx)
         {
             this.cache = cache;
             this.ctx = ctx;
@@ -29,29 +29,16 @@ namespace yaflay.ru.Controllers
             public string watermelon { get; set; }
             public string discordId { get; set; }
             public ApiKeyTypes type { get; set; }
-            
+
         }
         public class commentBody
         {
             public string text { get; set; }
             public string sender { get; set; }
         }
-        public class articleBody
-        {
-            public string title { get; set; }
-            public string annotation { get; set; }
-            public string text { get; set; }
-            public string image { get; set; }
-            public string author { get; set; } 
-        }
-        public class redirectBody
-        {
-            public string url { get; set; }
-            public string uri { get; set; }
-            public string author { get; set; }
-        }
 
-        [HttpGet("api/Index")]
+
+        [HttpGet("Index")]
         public async Task<IActionResult> getIndexPage()
         {
             string? indexPage = cache.Get<string>($"indexPage");
@@ -65,11 +52,24 @@ namespace yaflay.ru.Controllers
             return Ok(indexPage);
         }
 
-        [HttpPost("api/redirects")]
-        [Authorize(AuthenticationSchemes = "DISCORD-OAUTH-PRIVATE")]
-        public async Task<IActionResult> createRedirectUri([FromBody]redirectBody body)
+        [HttpGet("Projects")]
+        public async Task<IActionResult> getProjects()
         {
-            Console.WriteLine("url" + body.uri);
+            Console.WriteLine("Im here");
+            Projects[] projects = Array.Empty<Projects>();
+            if (cache.TryGetValue("projects", out projects) || ctx.Projects.Any())
+            {
+                projects ??= ctx.Projects.ToArray();
+                cache.Set("projects", (object)projects);
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(projects));
+            return Ok(projects);
+        }
+
+        [HttpPost("redirects")]
+        [Authorize(AuthenticationSchemes = "DISCORD-OAUTH-PRIVATE")]
+        public async Task<IActionResult> createRedirectUri([FromQuery]string url, [FromQuery] string uri)
+        {
             HttpResponseMessage message;
             using (var requestMessage =
                 new HttpRequestMessage(HttpMethod.Get, "https://discordapp.com/api/oauth2/@me"))
@@ -83,8 +83,8 @@ namespace yaflay.ru.Controllers
             {
                 Redirects redirects = new()
                 {
-                    redirectTo = body.url,
-                    uri = body.uri
+                    redirectTo = url,
+                    uri = uri
                 };
                 await ctx.Redirects.AddAsync(redirects);
                 await ctx.SaveChangesAsync();
@@ -95,9 +95,9 @@ namespace yaflay.ru.Controllers
                 return Unauthorized();
             }
         }
-        [HttpPost("api/Blog")]
+        [HttpPost("Blog")]
         [Authorize(AuthenticationSchemes = "DISCORD-OAUTH-PRIVATE")]
-        public async Task<IActionResult> createArticle([FromBody] articleBody body)
+        public async Task<IActionResult> createArticle([FromQuery] string title, [FromQuery] string annotation, [FromQuery] string text, [FromQuery] string image, [FromQuery] string author)
         {
 
             HttpResponseMessage message;
@@ -109,36 +109,27 @@ namespace yaflay.ru.Controllers
             }
             string responseBody = await message.Content.ReadAsStringAsync();
             JsonNode response = JsonNode.Parse(responseBody);
-            if (response["user"] != null || Startup.ownerId?.FirstOrDefault(response["user"]?["id"].ToString()) == null )
+            if (response["user"] != null && Startup.ownerId?.FirstOrDefault(response["user"]?["id"].ToString()) != null )
             {
-                try
+                
+                Blogs article = new()
                 {
-                    Blogs article = new()
-                    {
-                        Annotation = body.annotation,
-                        authorId = response["user"]["id"].ToString(),
-                        dateTime = DateTime.Now,
-                        ImageUrl = body.image,
-                        Text = body.text,
-                        Title = body.title,
-                        authorNickname = response["user"]["global_name"].ToString()
-                    };
-                    await ctx.Blogs.AddAsync(article);
-                    await ctx.SaveChangesAsync();
-                    return Ok(body);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("error: HomeController error");
-                    Console.WriteLine("debug: lines: 80-96");
-                    Console.WriteLine($"debug: data from site: {body}");
-                    Console.WriteLine($"debug: exception: {ex.Message}");
-                    return StatusCode(500, body);
-                }
+                    Annotation = annotation,
+                    authorId = response["user"]["id"].ToString(),
+                    dateTime = DateTime.Now,
+                    ImageUrl = image,
+                    Text = text,
+                    Title = title,
+                    authorNickname = response["user"]["global_name"].ToString()
+                };
+                await ctx.Blogs.AddAsync(article);
+                await ctx.SaveChangesAsync();
+                return Ok();
+
             }
             else
             {
-                return Unauthorized(body);
+                return Unauthorized();
             }
         }
         [HttpGet("logout")]
@@ -150,7 +141,7 @@ namespace yaflay.ru.Controllers
             return Redirect("/");
         }
 
-        [HttpGet("api/Blog/{blogId?}/comments")]
+        [HttpGet("Blog/{blogId?}/comments")]
         public async Task<IActionResult> blogComments(int? blogId)
         {
             Comments[]? comments = (Comments[]?)cache.Get($"commentsWithBlogId{blogId}");
@@ -163,16 +154,16 @@ namespace yaflay.ru.Controllers
             
             return Ok(comments);
         }
-        [HttpPost("api/Blog/{blogId}/comments")]
+        [HttpPost("Blog/{blogId}/comments")]
         [Authorize(AuthenticationSchemes = "DISCORD-OAUTH-PUBLIC")]
 
-        public async Task<IActionResult> CreateBlogComments(int blogId, [FromBody]commentBody body)
+        public async Task<IActionResult> CreateBlogComments(int blogId, [FromQuery] string text, [FromQuery] string sender)
         { 
             Comments comment = new()
             {
-                creatorMail = body.sender,
+                creatorMail = sender,
                 dateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                Text = body.text,
+                Text = text,
                 postId = blogId
             };
             await ctx.Comments.AddAsync(comment);
@@ -180,23 +171,16 @@ namespace yaflay.ru.Controllers
             return Ok();
         }
         
-        [HttpGet("api/Blog/{blogId}")]
-        public async Task<IActionResult> blog(int blogId)
+        [HttpGet("Blog/{id}")]
+        public async Task<IActionResult> blog(int id)
         {
-            Blogs? blog = cache.Get<Blogs>($"blogWithId{blogId}");
-            if (blog == null)
-            {
-                blog = ctx.Blogs.FirstOrDefault(k => k.Id == blogId);
-                if (blog != null)
-                    cache.Set($"blogWithId{blogId}", (object)blog, DateTime.Now.AddMinutes(10));
-                
-                
-            }
-            
-            
+            Blogs? blog;
+            if (!cache.TryGetValue($"blogWithId{id}", out blog) && ctx.Blogs.TryGetValue(k => k.Id == id, out blog)) 
+                cache.Set($"blogWithId{id}", blog, DateTime.Now.AddMinutes(30));
+         
             return Ok(blog);
         }
-        [HttpGet("api/Blog")]
+        [HttpGet("Blog")]
         public async Task<IActionResult> allBlogs()
         {
             Blogs[]? blogs = cache.Get<Blogs[]>($"allBlogs");
@@ -210,19 +194,9 @@ namespace yaflay.ru.Controllers
             }
             return Ok(blogs);
         }
-        [HttpPost("api/authorize")]
+        [HttpPost("authorize")]
         public async Task<IActionResult> authorizeUser([FromBody] authorizeBody body)
         {
-            var fromCache = cache.Get<ApiKey>($"apiKey-melon-{body.melon}");
-            if (fromCache == null)
-            {
-                var melon = ctx.ApiKeys.FirstOrDefault(k => k.Melon == body.melon);
-                if (melon != null)
-                {
-                    cache.Set($"apiKey-melon-{body.melon}", (object)melon, DateTime.Now.AddMinutes(20));
-                }
-            }
-
             await ctx.ApiKeys.AddAsync(
                 new()
                 {
@@ -235,23 +209,7 @@ namespace yaflay.ru.Controllers
             await ctx.SaveChangesAsync();
             return Ok(body.melon);
         }
-        [HttpGet("r/{uri}")]
-        public async Task<IActionResult> FromGitHub(string uri)
-        {
-            Console.WriteLine(uri);
-            //if (uri == "404") { return Ok(); }
-            Redirects? fromCache = cache.Get<Redirects>($"redirectsWithUrl-{uri}") ?? null;
-            if (fromCache == null)
-            {
-                fromCache = ctx.Redirects.FirstOrDefault(k => k.uri == uri);
-                Console.WriteLine("Im here!");
-                if (fromCache != null)
-                    cache.Set($"redirectsWithUrl-{uri}", (object)fromCache, DateTime.Now.AddMinutes(10));
-            }
-            Console.WriteLine(fromCache?.ToString());
-            return Redirect(fromCache?.redirectTo ?? "/404");
-           
-        } 
+        
         
     }
 }

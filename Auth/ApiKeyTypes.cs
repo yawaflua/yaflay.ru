@@ -1,4 +1,4 @@
-﻿namespace yaflay.ru.Auth
+﻿namespace yawaflua.ru.Auth
 {
 
     public enum ApiKeyTypes

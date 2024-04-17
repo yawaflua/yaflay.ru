@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using yaflay.ru.Models;
+using yawaflua.ru.Models;
 
 #nullable disable
 
-namespace yaflay.ru.Migrations
+namespace yawaflua.ru.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,36 @@ namespace yaflay.ru.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("yaflay.ru.Database.Tables.ApiKey", b =>
+            modelBuilder.Entity("api.yawaflua.ru.Models.Tables.Projects", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("yawaflua.ru.Database.Tables.ApiKey", b =>
                 {
                     b.Property<string>("Key")
                         .HasColumnType("text");
@@ -42,7 +71,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("ApiKeys", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Blogs", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,7 +110,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Blogs", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Comments", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Comments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +137,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Comments", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Redirects", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Redirects", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

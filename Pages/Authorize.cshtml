@@ -1,5 +1,5 @@
 ﻿@page "{code}"
-@model yaflay.ru.Pages.AuthorizeModel
+@model yawaflua.ru.Pages.AuthorizeModel
 @using System.Text.Json.Nodes
 @using Newtonsoft.Json
 @{
@@ -58,10 +58,10 @@
         {
             <h4>Ошибка! Попробуй авторизоваться заново</h4>
 
-            Console.Error.WriteLine("debug: START \\/ \nDon't worry, this message is not bad as you think");
+            Console.Error.WriteLine("debug: START \\/ \ninfo: Don't worry, this message is not bad as you think");
             Console.Error.WriteLine("error: DiscordAuthorize is not worked");
             Console.Error.WriteLine($"debug: Body from discord: {body}\ndebug: Sended data to discord: {message.Content.ReadAsStringAsync().Result}");
-            Console.Error.WriteLine($"info: Check environment data: \nClientId={Startup.clientId}\nClientSecret={Startup.clientSecret}\nRedirectUrl={Startup.redirectUrl}\nOwnerId={String.Join(",", Startup.ownerId)} ");
+            Console.Error.WriteLine($"info: Check environment data: \n  ClientId={Startup.clientId}\n   ClientSecret={Startup.clientSecret}\n   RedirectUrl={Startup.redirectUrl}\n OwnerId={String.Join(",", Startup.ownerId)} ");
             Console.Error.WriteLine("info: If any data is null and you set data in environment or appsettings.json, please create issue with this debug messages ");
             Console.Error.WriteLine("debug: END /\\");
         }
@@ -72,7 +72,7 @@
             try
             {
                 HttpContent bodytoApi;
-                bodytoApi = new StringContent(JsonConvert.SerializeObject(new yaflay.ru.Controllers.HomeController.authorizeBody()
+                bodytoApi = new StringContent(JsonConvert.SerializeObject(new yawaflua.ru.Controllers.ApiController.authorizeBody()
                     {
                         discordId = body["user"]["id"].ToString(),
                         melon = body["access_token"].ToString(),
@@ -87,7 +87,7 @@
                 Console.WriteLine(ex.Message);
             }
             
-            Response.Redirect("/authorize");
+            Response.Redirect("/authorize", true);
         }
     }
 }

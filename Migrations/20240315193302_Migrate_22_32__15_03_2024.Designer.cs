@@ -12,8 +12,8 @@ using yawaflua.ru.Models;
 namespace yawaflua.ru.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231218173546_Migrate18122035")]
-    partial class Migrate18122035
+    [Migration("20240315193302_Migrate_22_32__15_03_2024")]
+    partial class Migrate_22_32__15_03_2024
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,24 +25,53 @@ namespace yawaflua.ru.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("yawaflua.ru.Models.Tables.Author", b =>
+            modelBuilder.Entity("api.yawaflua.ru.Models.Tables.Projects", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("discordId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("discordNickName")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.ToTable("Author");
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("yawaflua.ru.Database.Tables.ApiKey", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("DiscordOwnerId")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<string>("Melon")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("ApiKeys", "public");
                 });
 
             modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
@@ -68,15 +97,18 @@ namespace yawaflua.ru.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("authorId")
-                        .HasColumnType("integer");
+                    b.Property<string>("authorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("authorNickname")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("dateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("authorId");
 
                     b.ToTable("Blogs", "public");
                 });
@@ -117,27 +149,14 @@ namespace yawaflua.ru.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("redirectTo")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("uri")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Redirects");
-                });
-
-            modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
-                {
-                    b.HasOne("yawaflua.ru.Models.Tables.Author", "author")
-                        .WithMany()
-                        .HasForeignKey("authorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("author");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,12 +5,14 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using DotNetEd.CoreAdmin;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.EntityFrameworkCore;
-using yaflay.ru.Auth;
-using yaflay.ru.Models;
+using Microsoft.Extensions.Caching.Memory;
+using yawaflua.ru.Auth;
+using yawaflua.ru.Models;
 
 
-namespace yaflay.ru
+namespace yawaflua.ru
 {
     public class Startup
     {
@@ -28,40 +30,16 @@ namespace yaflay.ru
         public Startup()
         {
             configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables(prefix: "m.")
+                .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json", optional: true)
                 .Build();
-            if (clientId == null | clientSecret == null | redirectUrl == null) 
-            {
-                clientId = configuration.GetValue<string>("clientId");
-                clientSecret = configuration.GetValue<string>("clientSecret");
-                redirectUrl = configuration.GetValue<string>("redirectUrl");
-            }
-            if (connectionString == null)
-            {
-                connectionString = configuration.GetValue<string>("connectionString");
-                Console.WriteLine("Connectionstring" + connectionString);
-                if (connectionString == null)
-                {
-                    throw new ArgumentException("ConnectionString is null!");
-                }
-            }
-            if (ownerId == null)
-            {
-                ownerId = new[] { configuration.GetValue<string>("ownerId") };
-                if (ownerId?.Length == 0)
-                {
-                    throw new ArgumentException("Owner id is null!");
-                }
-            }
-            if (readmeFile == null)
-            {
-                readmeFile = configuration.GetValue<string>("readmeFile");
-                if (readmeFile == null)
-                {
-                    throw new ArgumentException("ReadmeFile link is null");
-                }
-            }
+            
+            clientId = configuration.GetValue<string>("clientId");
+            clientSecret = configuration.GetValue<string>("clientSecret");
+            redirectUrl = configuration.GetValue<string>("redirectUrl");
+            connectionString = configuration.GetValue<string>("connectionString");
+            ownerId = configuration.GetValue<string[]>("ownerId");
+            readmeFile = configuration.GetValue<string>("readmeFile");
             
         }
         public void ConfigureServices(IServiceCollection services)
@@ -81,6 +59,8 @@ namespace yaflay.ru
                 .AddTransient<ApiKeyAuthantication>()
                 .AddSingleton(configuration)
                 .AddDbContext<AppDbContext>(c => c.UseNpgsql(connectionString: connectionString))
+                .AddSwaggerGen()
+                .AddSingleton(new MemoryCache(new MemoryCacheOptions()))
                 .AddAuthorization(k =>
                 {
                     k.AddPolicy("DISCORD-OAUTH-PUBLIC", policyBuilder => {
@@ -98,12 +78,13 @@ namespace yaflay.ru
                     options.DefaultChallengeScheme = "Bearer";
                     options.AddScheme<ApiKeyAuthantication>("DISCORD-OAUTH-PRIVATE", "DISCORD-OAUTH-PRIVATE");
                     options.AddScheme<ApiKeyAuthantication>("DISCORD-OAUTH-PUBLIC", "DISCORD-OAUTH-PUBLIC");
+                    options.RequireAuthenticatedSignIn = false;
                 }).AddScheme<AuthenticationSchemeOptions, ApiKeyAuthantication>("Bearer", options => {});
             services.AddMvc()
                     .AddRazorPagesOptions(options =>
                     {
                         options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
-                        options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
+                        options.Conventions.AddPageRoute("/rrobotsTxt", "/robots.txt");
                         options.Conventions.AddPageRoute("/NotFound", "/404");
                         options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                         options.Conventions.AddPageRoute("/Authorize", "/authorize");
@@ -132,17 +113,24 @@ namespace yaflay.ru
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSwagger((options) =>
+            {
+                options.RouteTemplate = "swagger/v1/swagger.json";
+            });
+            app.UseSwaggerUI();
 #if DEBUG
             app.UseCoreAdminCustomTitle("yawaflua");
             app.UseCoreAdminCustomAuth((k) => Task.FromResult(true));
             app.UseCoreAdminCustomUrl("admin/coreadmin");
 #endif
-            app.UseCors(k => { k.AllowAnyMethod(); k.AllowAnyOrigin(); k.AllowAnyHeader(); });
+            app.UseCors(k => { k.WithMethods("POST", "GET", "PATCH", "PUT"); k.AllowAnyOrigin(); k.AllowAnyHeader(); });
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapDefaultControllerRoute().AllowAnonymous();
+                endpoints.MapFallbackToFile("/index.html").AllowAnonymous();
+                endpoints.MapSwagger();
                 endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                endpoints.MapControllers().AllowAnonymous();
             });
 
         }

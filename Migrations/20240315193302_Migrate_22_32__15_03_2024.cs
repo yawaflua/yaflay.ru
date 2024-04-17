@@ -6,23 +6,25 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace yawaflua.ru.Migrations
 {
     /// <inheritdoc />
-    public partial class Migrate0512 : Migration
+    public partial class Migrate_22_32__15_03_2024 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Redirects",
+                name: "Projects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    uri = table.Column<string>(type: "text", nullable: false),
-                    redirectTo = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    url = table.Column<string>(type: "text", nullable: false),
+                    image = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Redirects", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.id);
                 });
         }
 
@@ -30,7 +32,7 @@ namespace yawaflua.ru.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Redirects");
+                name: "Projects");
         }
     }
 }

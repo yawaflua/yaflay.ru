@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using yaflay.ru.Models;
+using yawaflua.ru.Models;
 
 #nullable disable
 
-namespace yaflay.ru.Migrations
+namespace yawaflua.ru.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20231204171742_Migrate04122016")]
@@ -25,7 +25,7 @@ namespace yaflay.ru.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Blogs", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Blogs", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace yaflay.ru.Migrations
                     b.ToTable("Blogs", "public");
                 });
 
-            modelBuilder.Entity("yaflay.ru.Models.Tables.Comments", b =>
+            modelBuilder.Entity("yawaflua.ru.Models.Tables.Comments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

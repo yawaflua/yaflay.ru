@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using yaflay.ru.Models.Tables;
+using yawaflua.ru.Models.Tables;
 
-namespace yaflay.ru.Pages
+namespace yawaflua.ru.Pages
 {
     public class BlogModel : PageModel
     {

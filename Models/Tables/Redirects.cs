@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace yaflay.ru.Models.Tables
+namespace yawaflua.ru.Models.Tables
 {
     public class Redirects
     {

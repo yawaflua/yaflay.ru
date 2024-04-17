@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace yaflay.ru.Migrations
+namespace yawaflua.ru.Migrations
 {
     /// <inheritdoc />
     public partial class Migrate191220231734 : Migration

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace yaflay.ru.Models.Tables
+namespace yawaflua.ru.Models.Tables
 {
     [Table("Blogs", Schema = "public")]
     public class Blogs
