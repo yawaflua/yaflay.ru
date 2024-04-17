@@ -53,7 +53,7 @@
             message = await Startup.client.SendAsync(requestMessage);
         }
         string responseBody = await message.Content.ReadAsStringAsync();
-        JsonNode body = JsonNode.Parse(responseBody);
+        JsonNode? body = JsonNode.Parse(responseBody);
         if (body["access_token"]?.ToString() == null)
         {
             <h4>Ошибка! Попробуй авторизоваться заново</h4>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,15 +10,16 @@
     <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
     <Authors>yawaflua</Authors>
     <Company>yawaflua</Company>
-    <SpaProxyLaunchCommand>npm run serve -- --host 0.0.0.0 --port 8080</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>http://localhost:8080</SpaProxyServerUrl>
-	<SpaRoot>..\frontend.yawaflua.ru</SpaRoot>
   </PropertyGroup>
+
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
       <Version>8.*-*</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.32" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
@@ -26,6 +27,7 @@
     <ProjectReference Include="..\frontend.yawaflua.ru\frontend.yawaflua.ru.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+
   </ItemGroup>
 
   <ItemGroup>

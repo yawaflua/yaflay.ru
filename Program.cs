@@ -22,8 +22,7 @@ public class Program
 }
 public static class StaticProgram
 {
-    public static bool isNull(this object? value)
-    {
-        return value == null;
-    }
+    public static bool isNull(this object? value) =>
+        value == null;
+    
 }

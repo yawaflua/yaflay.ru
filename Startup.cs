@@ -47,7 +47,7 @@ namespace yawaflua.ru
             services.AddControllers()
                 .AddRazorPagesOptions(options =>
                 {
-                    options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
+                    
                     options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
                     options.Conventions.AddPageRoute("/NotFound", "/404");
                     options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
@@ -83,8 +83,7 @@ namespace yawaflua.ru
             services.AddMvc()
                     .AddRazorPagesOptions(options =>
                     {
-                        options.Conventions.AddPageRoute("/RobotsTxt", "/Robots.txt");
-                        options.Conventions.AddPageRoute("/rrobotsTxt", "/robots.txt");
+                        options.Conventions.AddPageRoute("/RobotsTxt", "/robots.txt");
                         options.Conventions.AddPageRoute("/NotFound", "/404");
                         options.Conventions.AddPageRoute("/IternalErrorPage", "/500");
                         options.Conventions.AddPageRoute("/Authorize", "/authorize");
@@ -106,6 +105,7 @@ namespace yawaflua.ru
             {
                 app.UseDeveloperExceptionPage();
                 app.UseHsts();
+                app.UseSpa(x => x.UseProxyToSpaDevelopmentServer("http://localhost:8080"));
             }
 
             // Configure the HTTP request pipeline.

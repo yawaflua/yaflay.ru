@@ -20,14 +20,13 @@ namespace yawaflua.ru.Controllers
             this.cache = cache;
         }
         [HttpGet("{uri}")]
-        public async Task<IActionResult> FromGitHub(string uri)
+        public async Task<IActionResult> FromGitHub(string uri, [FromQuery(Name = "to")] string? to, [FromQuery(Name = "debug")] string debug = "false")
         {
-            Console.WriteLine(uri);
             Redirects redirects;
-            if (!cache.TryGetValue($"redirectsWithUrl-{uri}", out redirects) || ctx.Redirects.TryGetValue(k => k.uri == uri, out redirects))
-                cache.Set($"redirectsWithUrl-{uri}", redirects, DateTime.Now.AddMinutes(10));
+            if (!cache.TryGetValue($"redirectsWithUrl-{uri}", out redirects) || ctx.Redirects.TryGetValue(k => k.uri == uri, out redirects) )
+                cache.Set($"redirectsWithUrl-{uri}", redirects, DateTime.Now.AddMinutes(20));
             
-            return Redirect(redirects?.redirectTo ?? "/404");
+            return Redirect(redirects?.redirectTo + to?.Replace("%", "/") ?? "/404");
 
         }
     }
