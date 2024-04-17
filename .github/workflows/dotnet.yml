@@ -21,8 +21,8 @@ jobs:
       with:
         dotnet-version: 7.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore "api.yawaflua.ru.csproj"
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore "api.yawaflua.ru.csproj"
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal "api.yawaflua.ru.csproj"
